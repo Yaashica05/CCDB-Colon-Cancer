@@ -217,7 +217,7 @@ elif menu == "Colon Cancer Database Search":
     st.markdown("Enter a gene name (e.g., APC, KRAS, TP53) to search the database.")
 
     # !!! IMPORTANT: Update this path to your actual Excel file location !!!
-    data_path = r"C:\Users\DELL\Downloads\Product Development\Colon Cancer.xlsx"  # Assumes file is in the same folder as the script
+    data_path = "Colon Cancer.xlsx"  # Assumes file is in the same folder as the script
 
     query = st.text_input("Enter Gene Name to Search:", key="gene_search_input")
 
