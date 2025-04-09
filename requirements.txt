@@ -1,0 +1,6 @@
+# requirements.txt
+streamlit
+biopython
+pandas
+matplotlib
+openpyxl
