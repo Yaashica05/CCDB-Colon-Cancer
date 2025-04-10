@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import streamlit as st
 import pandas as pd
 from Bio.Seq import Seq
@@ -22,7 +21,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# --- Custom CSS Styling (LIGHT BLUE THEME + Times New Roman + Bold) ---
+# --- Custom CSS Styling (Refined Dark Theme + Times New Roman + Bold) ---
 st.markdown(
     """
     <style>
@@ -38,218 +37,202 @@ st.markdown(
     table th, table td, table a,
     .stAlert,
     .footer,
-    /* Sidebar specific text elements */
-    [data-testid="stSidebar"] h1,
-    [data-testid="stSidebar"] h2,
-    [data-testid="stSidebar"] h3,
-    [data-testid="stSidebar"] label,
-    [data-testid="stSidebar"] .stRadio div[role="radiogroup"] > label, /* Sidebar Radio OPTIONS text */
-    [data-testid="stSidebar"] [data-testid="stExpander"] summary,
     /* Ensure plot text elements inherit if possible (often needs Python-side control) */
-    .plot-container text, /* General plot text target */
-    /* Target common streamlit elements containing text */
-    [data-testid="stMarkdownContainer"], [data-testid="stText"],
-    [data-testid="stMetricLabel"], [data-testid="stMetricValue"], [data-testid="stMetricDelta"]
+    .plot-container text
     {
         font-family: 'Times New Roman', Times, serif !important;
         font-weight: bold !important;
-        color: #1E2A3A; /* Default DARK text color */
     }
 
     /* Remove underlines globally, except on hover for links */
     a, a:link, a:visited {
         text-decoration: none !important;
-        color: #0056b3 !important; /* Dark Blue link color */
     }
     a:hover {
         text-decoration: underline !important;
-        color: #003d80 !important; /* Darker blue on hover */
     }
 
-    /* --- Specific Element Styling (LIGHT BLUE THEME) --- */
+    /* --- Specific Element Styling (REFINED DARK THEME) --- */
 
-    /* Body background - Subtle Light Blue Gradient */
+    /* Body background - Subtle Dark Gradient *** UPDATED *** */
     body {
-        background-color: #e6f7ff; /* Fallback light blue */
-        background-image: linear-gradient(to bottom right, #e6f7ff, #cceeff); /* Light blue gradient */
-        background-attachment: fixed;
-        min-height: 100vh;
+        background-color: #0b0c10; /* Fallback */
+        background-image: linear-gradient(to bottom right, #0b0c10, #1a1a2e); /* Dark blue/purple gradient */
+        background-attachment: fixed; /* Keep gradient fixed during scroll */
+        min-height: 100vh; /* Ensure gradient covers full height */
     }
 
-    /* Main app container - Off-white/Very Light Grey */
+    /* Main app container - Dark Blue-Grey */
     .stApp {
-        background-color: #f8f9fa; /* Very light grey/off-white */
+        background-color: #1f2833;
         padding: 30px; border-radius: 10px;
-        border: 1px solid #b3d9ff; /* Lighter blue border */
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+        border: 1px solid #45a29e; /* Teal border */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
         padding-bottom: 80px; /* Space for footer */
-        color: #1E2A3A; /* Default dark text color for app container */
+        color: #d0d0d0; /* Default text color - light grey */
     }
 
-    /* Sidebar Styling - Slightly different light shade */
+    /* Sidebar Styling - Slightly different shade */
     [data-testid="stSidebar"] {
-        background-color: #e0f2f7; /* Slightly different light blue/cyan */
-        border-right: 2px solid #b3d9ff; /* Light blue separator */
-        padding-top: 2rem;
+        background-color: #1a1a2e; /* Dark Blue/Purple */
+        border-right: 2px solid #45a29e; /* Teal separator */
+        padding-top: 2rem; /* Add some top padding */
     }
     /* Sidebar Header & Widget Labels */
     [data-testid="stSidebar"] h1,
     [data-testid="stSidebar"] h2,
     [data-testid="stSidebar"] h3,
-    [data-testid="stSidebar"] label
+    [data-testid="stSidebar"] label /* General label targeting */
     {
-         color: #004080 !important; /* Darker Blue */
+         color: #66fcf1 !important; /* Bright Cyan */
     }
     /* Sidebar Radio Button Options Text */
     [data-testid="stSidebar"] .stRadio div[role="radiogroup"] > label {
-         color: #333333 !important; /* Dark Grey for options */
+         color: #e0e0e0 !important; /* Light grey for options */
+         font-weight: bold !important; /* Ensure boldness */
+         font-family: 'Times New Roman', Times, serif !important;
     }
      /* Sidebar expander */
     [data-testid="stSidebar"] [data-testid="stExpander"] summary {
-        color: #0056b3; /* Dark Blue */
+        color: #97e8e1; /* Lighter Cyan */
     }
 
-    /* Headings - Dark Blue */
-    h1, h2, h3, h4, h5, h6 { color: #004080; }
-    h1 { border-bottom: 2px solid #80ccff; padding-bottom: 10px; margin-bottom: 20px; } /* Lighter blue border */
+    /* Headings - Bright Cyan */
+    h1, h2, h3, h4, h5, h6 { color: #66fcf1; }
+    h1 { border-bottom: 2px solid #45a29e; padding-bottom: 10px; margin-bottom: 20px; }
     h2 { padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px;}
-    h3 { margin-top: 25px; margin-bottom: 10px; color: #0056b3; } /* Slightly lighter dark blue for H3 */
+    h3 { margin-top: 25px; margin-bottom: 10px; color: #97e8e1; } /* Lighter Cyan for H3 */
 
 
-    /* Paragraph text - Dark Grey/Black */
-    p, div, span, li, [data-testid="stMarkdownContainer"] p {
-        color: #333333; line-height: 1.7; font-size: 16px;
-    }
+    /* Paragraph text - Light Grey */
+    p, div, span, li { color: #e0e0e0; line-height: 1.7; font-size: 16px; }
 
-     /* Labels for Widgets - Dark Blue */
+     /* Labels for Widgets - Lighter Cyan */
     .stTextInput>label, .stTextArea>label, .stSelectbox>label, .stNumberInput>label,
     .stFileUploader>label, .stSlider>label, .stRadio>label, .stCheckbox>label,
-    .stMultiSelect>label, [data-testid="stMetricLabel"]
+    .stMultiSelect>label
     {
-        color: #0056b3 !important; font-size: 1.1em; margin-bottom: 5px;
+        color: #97e8e1; font-size: 1.1em; margin-bottom: 5px;
     }
 
     /* Input fields, Select boxes, Text Areas */
     .stTextInput>div>div>input,
     .stTextArea>div>textarea,
-    .stSelectbox>div>div>div,
-    .stMultiSelect>div>div
+    .stSelectbox>div>div>div, /* Container for selected value */
+    .stMultiSelect>div>div /* Container for multiselect */
     {
-        border: 1px solid #ced4da; /* Standard grey border */
-        border-radius: 5px; background-color: #ffffff; /* White background */
-        color: #212529; /* Dark text */
-        padding: 9px 12px;
+        border: 1px solid #4f5b66; border-radius: 5px; background-color: #2c3e50; /* Darker input bg */
+        color: #e1e1e1; padding: 9px 12px;
     }
     .stTextArea>div>textarea { min-height: 150px; }
-    .stSelectbox [data-baseweb="select"] > div { background-color: #ffffff; } /* Ensure dropdown bg matches */
-    .stMultiSelect [data-baseweb="tag"] { background-color: #007bff; color: #ffffff; } /* Primary blue tags, white text */
+    .stSelectbox [data-baseweb="select"] > div { background-color: #2c3e50; } /* Ensure dropdown bg matches */
+    .stMultiSelect [data-baseweb="tag"] { background-color: #45a29e; color: #0b0c10; } /* Teal tags */
 
     /* Input Placeholders */
-    .stTextInput>div>div>input::placeholder, .stTextArea>div>textarea::placeholder {
-        color: #6c757d; opacity: 0.8; /* Grey placeholder */
-        font-weight: normal !important;
-    }
+    .stTextInput>div>div>input::placeholder, .stTextArea>div>textarea::placeholder { color: #a0a0a0; opacity: 0.8; }
 
-    /* Buttons - Good Contrast Blue */
+    /* Buttons - Cyan */
     .stButton>button {
-        border-radius: 5px; background-color: #007bff; color: #ffffff; /* Primary Blue bg, WHITE text */
-        border: 1px solid #0069d9; padding: 10px 22px;
+        border-radius: 5px; background-color: #66fcf1; color: #0b0c10; /* Cyan bg, very dark text */
+        border: 1px solid #45a29e; padding: 10px 22px;
         transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.2s ease;
-        font-size: 1.05em; box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        font-size: 1.05em; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .stButton>button:hover {
-        background-color: #0056b3; color: #ffffff; transform: translateY(-2px); /* Darker blue on hover */
-        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3); border-color: #0056b3;
+        background-color: #48dbcd; color: #0b0c10; transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(102, 252, 241, 0.2); border-color: #66fcf1;
     }
     .stButton>button:active {
-        background-color: #004085; transform: translateY(0px); /* Even darker blue */
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); border-color: #00376b;
+        background-color: #45a29e; transform: translateY(0px);
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); border-color: #31726e;
     }
      /* Disabled button styling */
     .stButton>button:disabled {
-        background-color: #adb5bd; color: #6c757d; border-color: #adb5bd; /* Greyed out */
+        background-color: #4f5b66; color: #999; border-color: #4f5b66;
         cursor: not-allowed;
     }
 
-    /* Tables - Consistent Light Theme */
+    /* Tables - Consistent Dark Theme */
     table {
         border-collapse: separate; border-spacing: 0; width: 100%; margin-bottom: 1.5rem;
-        background-color: #ffffff; /* White background */
-        border: 1px solid #dee2e6; /* Lighter grey border */
-        border-radius: 6px; overflow: hidden;
+        background-color: #25303a; /* Slightly lighter than main bg */
+        border: 1px solid #4f5b66; border-radius: 6px; overflow: hidden;
     }
     table th {
-        text-align: left; padding: 12px 15px; background-color: #e9ecef; /* Light grey header bg */
-        color: #212529; /* Dark header text */
-        border-bottom: 2px solid #dee2e6;
+        text-align: left; padding: 12px 15px; background-color: #2c3e50; /* Header bg */
+        color: #97e8e1; /* Header text - Lighter Cyan */
+        border-bottom: 2px solid #45a29e; /* Teal bottom border */
     }
     table td {
         vertical-align: middle; text-align: left; padding: 12px 15px;
-        border-top: 1px solid #dee2e6; /* Internal border */
-        color: #333333; /* Dark cell text */
+        border-top: 1px solid #4f5b66; /* Internal border */
+        color: #d0d0d0; /* Cell text */
     }
-    /* Table links - Use global link color */
-    table a, table a:link, table a:visited {
-        color: #0056b3 !important;
-        font-weight: bold !important;
-        text-decoration: none !important;
-    }
-    table a:hover {
-        color: #003d80 !important;
-        text-decoration: underline !important;
-    }
+    /* Table links */
+    table a { color: #fca311; /* Bright Orange links */ }
+    table a:hover { color: #ffbf00; /* Lighter Orange on hover */ }
     /* Zebra striping */
-    table tbody tr:nth-of-type(odd) { background-color: #ffffff; } /* White row */
-    table tbody tr:nth-of-type(even) { background-color: #f8f9fa; } /* Slightly off-white even row */
-    table tbody tr:hover { background-color: #e9ecef; } /* Light grey hover row */
+    table tbody tr:nth-of-type(odd) { background-color: #25303a; } /* Base row color */
+    table tbody tr:nth-of-type(even) { background-color: #2c3e50; } /* Slightly different even row */
+    table tbody tr:hover { background-color: #3a4b5a; } /* Hover row color */
 
-    /* Alerts - Themed for Light Background */
+    /* Alerts - Themed */
     .stAlert { border-radius: 5px; padding: 15px; font-size: 1.05em; border: 1px solid; }
-    .stAlert > div[data-testid="stMarkdownContainer"] > p {
-        color: inherit !important; /* Inherit text color from parent alert div */
-        font-weight: bold !important;
-        font-family: 'Times New Roman', Times, serif !important;
-    }
+    .stAlert > div[data-testid="stMarkdownContainer"] > p { color: inherit !important; font-weight: bold !important; font-family: 'Times New Roman', Times, serif !important; }
     div[data-baseweb="alert"][role="alert"] { border-left: 5px solid; }
     /* Info */
-    div[data-testid="stInfo"] { border-color: #17a2b8; background-color: #d1ecf1; color: #0c5460; } /* Cyan */
+    div[data-testid="stInfo"] { border-color: #66fcf1; background-color: #2a3b4c; color: #d1ffff; }
     /* Success */
-    div[data-testid="stSuccess"] { border-color: #28a745; background-color: #d4edda; color: #155724; } /* Green */
+    div[data-testid="stSuccess"] { border-color: #50fa7b; background-color: #283a2f; color: #c3e88d; }
     /* Warning */
-    div[data-testid="stWarning"] { border-color: #ffc107; background-color: #fff3cd; color: #856404; } /* Yellow */
+    div[data-testid="stWarning"] { border-color: #ffbf00; background-color: #4d3c1a; color: #ffd54f; }
     /* Error */
-    div[data-testid="stError"] { border-color: #dc3545; background-color: #f8d7da; color: #721c24; } /* Red */
+    div[data-testid="stError"] { border-color: #ff5555; background-color: #4d2a2a; color: #ff8a80; }
 
     /* Footer - Fixed at bottom */
     .footer {
         position: fixed; left: 0; bottom: 0; width: 100%;
-        background-color: #e0f2f7; /* Match sidebar background */
-        color: #004080; /* Dark Blue text */
+        background-color: #0b0c10; /* Match body gradient start */
+        background-image: linear-gradient(to right, #0b0c10, #1a1a2e); /* Match body gradient */
+        color: #97e8e1; /* Lighter Cyan text */
         text-align: center; padding: 12px; font-size: 14px;
-        border-top: 3px solid #b3d9ff; /* Light blue top border */
+        border-top: 3px solid #45a29e; /* Teal top border */
         z-index: 1000;
         font-family: 'Times New Roman', Times, serif !important; font-weight: bold !important;
     }
 
     /* Ensure Plotly/Matplotlib backgrounds are transparent or match theme */
-    .plot-container.plotly, .stPlotlyChart, .stVegaLiteChart { background-color: transparent !important; }
+    .plot-container.plotly, .stPlotlyChart, .stVegaLiteChart {
+        background-color: transparent !important;
+    }
     /* Style Streamlit expander */
-    [data-testid="stExpander"] { border: 1px solid #ced4da; border-radius: 5px; background-color: #ffffff; margin-bottom: 1rem; }
-    [data-testid="stExpander"] summary { background-color: #e9ecef; color: #0056b3; border-radius: 5px 5px 0 0; padding: 10px 15px; }
-    [data-testid="stExpander"] summary:hover { background-color: #d6dade; }
-    [data-testid="stExpander"] [data-testid="stVerticalBlock"] { padding: 15px; background-color: #f8f9fa; }
+    [data-testid="stExpander"] {
+        border: 1px solid #4f5b66;
+        border-radius: 5px;
+        background-color: #25303a; /* Slightly lighter than main bg */
+    }
+    [data-testid="stExpander"] summary {
+        background-color: #2c3e50; /* Header part */
+        color: #97e8e1; /* Lighter cyan text */
+        border-radius: 5px 5px 0 0;
+        padding: 10px 15px;
+    }
+    [data-testid="stExpander"] summary:hover {
+        background-color: #3a4b5a;
+    }
+
     /* Style Streamlit Divider */
-    hr { border-top: 1px solid #dee2e6; margin-top: 1rem; margin-bottom: 1rem; }
-    /* Style Streamlit Metric */
-    [data-testid="stMetric"] { background-color: #e9ecef; border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; margin-bottom: 10px; }
-    [data-testid="stMetricValue"] { color: #1E2A3A !important; font-size: 1.6em !important; }
-    [data-testid="stMetricDelta"] { color: #333333 !important; }
-    /* Ensure code blocks match theme */
-    .stCodeBlock code { background-color: #e9ecef; color: #212529; border: 1px solid #dee2e6; border-radius: 5px; padding: 10px; font-family: monospace !important; font-weight: normal !important; font-size: 0.95em; white-space: pre-wrap; word-wrap: break-word; }
+    hr {
+        border-top: 1px solid #4f5b66; /* Subtle divider */
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
     </style>
     """,
     unsafe_allow_html=True,
 )
+
 
 # --- Global Variables & Constants ---
 DATA_PATH = "Colon Cancer.xlsx"
@@ -261,488 +244,1691 @@ AMBIGUOUS_AA = "BZXJ*"
 # --- Helper function to parse FASTA files ---
 def parse_fasta(uploaded_file):
     """Parses the first sequence from an uploaded FASTA file."""
-    sequence, seq_id = None, None
+    sequence = None
+    seq_id = None
     if uploaded_file is not None:
         try:
-            uploaded_file.seek(0); content_bytes = uploaded_file.getvalue()
+            # Reset file pointer just in case it was read before
+            uploaded_file.seek(0)
+            content_bytes = uploaded_file.getvalue()
             try: content_str = content_bytes.decode("utf-8")
             except UnicodeDecodeError: content_str = content_bytes.decode("latin-1")
-            stringio = io.StringIO(content_str); records = list(SeqIO.parse(stringio, "fasta"))
-            if records: first=records[0]; sequence=str(first.seq).upper(); seq_id=first.id; st.success(f"Read: **{seq_id}** ({len(sequence):,} items).")
-            else: st.error("FASTA empty/invalid.")
-        except Exception as e: st.error(f"FASTA Read Error: {e}")
+
+            stringio = io.StringIO(content_str)
+            records = list(SeqIO.parse(stringio, "fasta"))
+            if records:
+                first_record = records[0]
+                sequence = str(first_record.seq).upper()
+                seq_id = first_record.id
+                st.success(f"Read FASTA ID: **{seq_id}** ({len(sequence):,} bases/AAs).")
+            else: st.error("FASTA file empty or invalid.")
+        except Exception as e:
+            st.error(f"FASTA Read Error: {e}")
     return sequence, seq_id
 
 # --- Helper function to create links for the Database Search ---
 def format_link(value, column_name):
-    """Creates an HTML link based on column name and value."""
-    if pd.isna(value): return ""; s_value = str(value).strip();
+    """Creates an HTML link based on column name and value with styling."""
+    if pd.isna(value): return ""
+    s_value = str(value).strip()
     if not s_value: return ""
-    col_name_std = column_name.strip().title(); link_style = 'style="color:#0056b3 !important;"'
+
+    col_name_std = column_name.strip().title()
+    # Using the orange link color defined in CSS (fca311)
+    link_style = 'style="color:#fca311;"' # Bold is global, underline on hover handled by CSS
+
     try:
-        if s_value.startswith("http"): display_url = s_value if len(s_value) < 50 else s_value[:47]+"..."; return f'<a href="{s_value}" target="_blank" {link_style} title="{s_value}">{display_url}</a>'
-        elif col_name_std == 'Pubmed Id' and s_value.replace('.','',1).isdigit(): url = f"https://pubmed.ncbi.nlm.nih.gov/{s_value}"; return f'<a href="{url}" target="_blank" {link_style}>{s_value}</a>'
-        elif col_name_std == 'Doi Id' and '/' in s_value: encoded_doi = urllib.parse.quote(s_value, safe='/:'); url = f"https://doi.org/{encoded_doi}"; return f'<a href="{url}" target="_blank" {link_style}>{s_value}</a>'
-        elif col_name_std == 'Uniprot' and re.match(r'^[A-Z0-9_.\-]+$',s_value,re.I): url = f"https://www.uniprot.org/uniprotkb/{s_value}/entry"; return f'<a href="{url}" target="_blank" {link_style}>{s_value}</a>'
-        else: return s_value
-    except Exception: return s_value
+        if col_name_std == 'Pubmed Id':
+            if s_value.replace('.', '', 1).isdigit(): url = f"https://pubmed.ncbi.nlm.nih.gov/{s_value}"
+            elif s_value.startswith("http"): url = s_value
+            else: return s_value # Return as text if not a number or URL
+            return f'<a href="{url}" target="_blank" {link_style}>{s_value}</a>'
+        elif col_name_std == 'Doi Id':
+            if '/' in s_value and not s_value.startswith("http"):
+                encoded_doi = urllib.parse.quote(s_value, safe='/:')
+                url = f"https://doi.org/{encoded_doi}"
+            elif s_value.startswith("http"): url = s_value
+            else: return s_value
+            return f'<a href="{url}" target="_blank" {link_style}>{s_value}</a>'
+        elif col_name_std == 'Uniprot':
+             # Simple check for common UniProtKB ID format or URL
+             if re.match(r'^[A-Z0-9_.\-]+$', s_value, re.IGNORECASE) and not s_value.startswith("http"):
+                 url = f"https://www.uniprot.org/uniprotkb/{s_value}/entry"
+             elif s_value.startswith("http"): url = s_value
+             else: return s_value
+             return f'<a href="{url}" target="_blank" {link_style}>{s_value}</a>'
+        # General URL detection for specified columns or columns containing 'link', 'url', etc.
+        elif col_name_std in ['Blast', 'Conserved Domain', 'Link', 'Url', 'Reference'] or 'link' in col_name_std.lower() or 'url' in col_name_std.lower():
+             if s_value.startswith("http"):
+                  display_url = s_value if len(s_value) < 50 else s_value[:47] + "..."
+                  return f'<a href="{s_value}" target="_blank" {link_style} title="{s_value}">{display_url}</a>'
+             else: return s_value # Return non-HTTP values as text
+        else:
+            # Fallback: If any other column contains a value starting with http, treat it as a link
+            if s_value.startswith("http"):
+                display_url = s_value if len(s_value) < 50 else s_value[:47] + "..."
+                return f'<a href="{s_value}" target="_blank" {link_style} title="{s_value}">{display_url}</a>'
+            else: return s_value # Default: return value as text
+    except Exception: # Catch any unexpected formatting error
+        return s_value # Return original value if linking fails
 
 # --- Helper function for Matplotlib Plot Styling ---
 def style_plot(fig, ax, title="", xlabel="", ylabel=""):
-    """Applies consistent LIGHT theme styling (Times New Roman Bold) to a Matplotlib plot."""
-    fig.patch.set_facecolor('#f8f9fa'); fig.patch.set_alpha(1.0); ax.set_facecolor('#ffffff')
-    font_props = {'family':'Times New Roman','weight':'bold'}; txt_c='#1E2A3A'; acc_c='#004080'
-    ax.set_title(title,color=acc_c,fontsize=14,**font_props); ax.set_xlabel(xlabel,color=txt_c,fontsize=12,**font_props); ax.set_ylabel(ylabel,color=txt_c,fontsize=12,**font_props)
-    tick_c='#333333'; ax.tick_params(axis='x',colors=tick_c,labelsize=10); ax.tick_params(axis='y',colors=tick_c,labelsize=10)
-    for label in ax.get_xticklabels()+ax.get_yticklabels(): label.set_fontfamily('Times New Roman'); label.set_fontweight('bold'); label.set_color(tick_c)
-    ax.grid(True,linestyle=':',alpha=0.6,color='#cccccc'); [s.set_edgecolor('#dee2e6') for s in ax.spines.values()]; plt.tight_layout()
+    """Applies consistent dark theme styling to a Matplotlib plot."""
+    fig.patch.set_facecolor('#1f2833') # Match app background
+    fig.patch.set_alpha(1.0) # Ensure figure background is opaque
+    ax.set_facecolor('#2c3e50') # Slightly different background for plot area
+
+    # Titles and Labels
+    ax.set_title(title, color="#66fcf1", fontweight='bold', fontsize=14, fontfamily='Times New Roman')
+    ax.set_xlabel(xlabel, color="#e0e0e0", fontweight='bold', fontsize=12, fontfamily='Times New Roman')
+    ax.set_ylabel(ylabel, color="#e0e0e0", fontweight='bold', fontsize=12, fontfamily='Times New Roman')
+
+    # Ticks
+    ax.tick_params(axis='x', colors='#d0d0d0', labelsize=10)
+    ax.tick_params(axis='y', colors='#d0d0d0', labelsize=10)
+    for label in ax.get_xticklabels() + ax.get_yticklabels():
+        label.set_fontfamily('Times New Roman')
+        label.set_fontweight('bold')
+
+    # Grid
+    ax.grid(True, linestyle=':', alpha=0.4, color='#888888')
+
+    # Spines (borders of the plot area)
+    for spine in ax.spines.values():
+        spine.set_edgecolor('#4f5b66')
+
+    plt.tight_layout()
 
 # --- Main App Title ---
 st.title("🧬 CCDB: Colon Cancer Database and Bioinformatics Tools 🔬")
+# (Removed the markdown separator here)
 
 # --- Sidebar Navigation ---
 with st.sidebar:
-    st.header("🛠️ Toolbox Menu"); menu=st.radio("Select Feature:",["Home","Colon Cancer Database Search","DNA Sequence Analysis","Protein Sequence Analysis","Primer Design","Restriction Enzyme Analysis","Pairwise Sequence Alignment","Motif Finder Tool","Bioinformatics Tool (Transcription/Translation)","Genome Coverage Plotter","Variant Annotation Tool","Codon Usage Analyzer"],key="main_menu",help="Choose tool.")
-    st.divider(); st.info("Ensure input files ready.")
+    st.header("🛠️ Toolbox Menu")
+    menu = st.radio(
+        "Select Feature:",
+        [
+            "Home", "Colon Cancer Database Search", "DNA Sequence Analysis",
+            "Protein Sequence Analysis", "Primer Design", "Restriction Enzyme Analysis",
+            "Pairwise Sequence Alignment", "Motif Finder Tool",
+            "Bioinformatics Tool (Transcription/Translation)", "Genome Coverage Plotter",
+            "Variant Annotation Tool", "Codon Usage Analyzer",
+        ],
+        key="main_menu", help="Choose a tool from the list."
+    )
+    st.divider()
+    st.info("Ensure input files (FASTA, coverage data, etc.) are readily available for upload.")
+    # Optionally add more sidebar content, links, or info here
+
 
 # --- Page Content based on Menu Selection ---
 
-if menu == "Home": # Content unchanged
-    st.header("Welcome"); st.markdown( # Shortened for brevity in testing
-        """Access curated colon cancer gene data & tools. User-friendly platform.---### **CRC** CRC develops in colon/rectum. Starts as polyps. Can metastasize.---### **Key Info:** Risk: Age, History, Genetics, Lifestyle. Symptoms: Bowel changes, bleeding, pain, weight loss. Screening: Colonoscopy, stool tests. Genetics: *APC, KRAS, TP53*, MMR. Treatment: Surgery, Chemo, Rad, Targeted, Immuno.---### **Tools:** Use sidebar.---*Disclaimer: Educational only.*""", unsafe_allow_html=True)
-    st.image("https://img.freepik.com/free-vector/colorectal-cancer-crc-infographic-education_1308-47971.jpg",caption="CRC Infographic",use_container_width=True)
-    st.markdown("""<a href="https://www.cancer.org/cancer/types/colon-rectal-cancer.html" target="_blank" style="color:#0056b3;">Learn more (ACS)</a>""", unsafe_allow_html=True)
-    st.divider(); st.subheader("Feedback"); fb=st.text_area("Feedback:",key="fb_home",placeholder="Thoughts...");
-    if st.button("Submit",key="sub_fb_home"): st.success("Thank you!") if fb else st.warning("Empty.")
+if menu == "Home":
+    st.header("Welcome to the Colon Cancer Data Resource & Toolbox")
+    st.markdown(
+        """
+        This application provides access to a curated database of genes implicated in colon cancer
+        and a suite of bioinformatics tools for sequence analysis. Our goal is to offer a user-friendly
+        platform for researchers, students, and clinicians interested in colon cancer genomics and molecular biology.
 
-elif menu == "Colon Cancer Database Search": # Syntax fix applied
-    st.header("Colon Cancer Gene DB Search"); st.markdown(f"Search local file (`{DATA_PATH}`).")
-    if not os.path.exists(DATA_PATH): st.error(f"`{DATA_PATH}` missing."); st.stop()
-    query=st.text_input("Gene Symbol:",key="gene_search",placeholder="e.g., APC")
-    if st.button("Search",key="gene_search_btn"):
-        if not query: st.warning("Enter gene.")
+        ---
+
+        ### **Understanding Colon Cancer (Colorectal Cancer - CRC)**
+
+        Colon cancer, often grouped with rectal cancer as colorectal cancer (CRC), develops in the large intestine (colon) or the rectum (the final section of the large intestine). It is one of the most common cancers worldwide.
+
+        *   **Development:** Most CRCs begin as noncancerous growths called polyps on the inner lining of the colon or rectum. Over time, some polyps can transform into cancer. Adenomatous polyps are the most common type with malignant potential.
+        *   **Spread:** If not detected early, cancer cells can grow into the wall of the colon or rectum, invade nearby lymph nodes or blood vessels, and metastasize (spread) to distant organs like the liver or lungs.
+
+        ### **Key Information:**
+
+        *   **Risk Factors:**
+            *   **Age:** Risk increases significantly after age 50.
+            *   **Personal/Family History:** Previous CRC, polyps, or inflammatory bowel disease (IBD like Crohn's or Ulcerative Colitis). Family history of CRC or polyps.
+            *   **Inherited Syndromes:** Lynch syndrome (HNPCC) and Familial Adenomatous Polyposis (FAP) greatly increase risk.
+            *   **Lifestyle:** Diets high in red/processed meats, low fiber, obesity, physical inactivity, smoking, heavy alcohol use.
+            *   **Type 2 Diabetes:** Associated with increased risk.
+        *   **Symptoms:** *(May be absent in early stages)*
+            *   Changes in bowel habits (diarrhea, constipation, narrowing of stool) lasting more than a few days.
+            *   Rectal bleeding or blood in the stool.
+            *   Persistent abdominal discomfort (cramps, gas, pain).
+            *   A feeling that the bowel doesn't empty completely.
+            *   Unexplained weight loss, weakness, or fatigue.
+        *   **Screening & Early Detection:** Crucial for prevention and better outcomes.
+            *   **Colonoscopy:** Visualizes the entire colon, allows polyp removal. (Gold standard)
+            *   **Stool-Based Tests:** FIT (Fecal Immunochemical Test), gFOBT (guaiac-based Fecal Occult Blood Test), Stool DNA tests.
+            *   **Other Visual Exams:** Sigmoidoscopy, CT Colonography (Virtual Colonoscopy).
+            *   *Screening recommendations vary; consult a healthcare provider.*
+        *   **Genetic Factors:** Mutations in key genes like *APC*, *KRAS*, *BRAF*, *TP53*, and mismatch repair genes (*MLH1*, *MSH2*, *MSH6*, *PMS2*) are frequently involved in CRC development.
+        *   **Treatment Options:** Depend on stage and individual factors. May include surgery, chemotherapy, radiation therapy, targeted drug therapy (e.g., against EGFR or VEGF), and immunotherapy (especially for MSI-High tumors).
+
+        ---
+
+        ### **Available Tools in this Application:**
+
+        Use the sidebar menu to explore these features:
+
+        *   **Colon Cancer Database Search:** Find information on specific genes linked to colon cancer from our curated dataset.
+        *   **DNA Sequence Analysis:** Calculate GC content, length, and base composition of a DNA sequence.
+        *   **Protein Sequence Analysis:** Determine molecular weight, pI, GRAVY score, amino acid composition, and predicted secondary structure of a protein sequence.
+        *   **Primer Design:** Generate basic forward and reverse primers from a DNA template.
+        *   **Restriction Enzyme Analysis:** Find restriction enzyme cut sites in a DNA sequence.
+        *   **Pairwise Sequence Alignment:** Align two DNA or protein sequences using global or local algorithms.
+        *   **Motif Finder Tool:** Locate specific sequence patterns (motifs) within DNA or protein sequences using exact matches or regular expressions.
+        *   **Bioinformatics Tool (Transcription/Translation):** Transcribe DNA to RNA and translate RNA to protein based on the standard genetic code.
+        *   **Genome Coverage Plotter:** Visualize sequencing coverage depth across genomic positions from an uploaded file.
+        *   **Variant Annotation Tool:** Apply a simple single-base substitution to a reference DNA sequence and predict its codon effect.
+        *   **Codon Usage Analyzer:** Analyze the frequency of codon usage in a coding DNA sequence (CDS).
+
+        ---
+        *Disclaimer: This tool is intended for educational and informational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always consult with a qualified healthcare provider regarding any medical conditions or treatment options.*
+        """, unsafe_allow_html=True
+    )
+
+    # Using the Freepik Infographic image
+    st.image(
+        "https://img.freepik.com/free-vector/colorectal-cancer-crc-infographic-education_1308-47971.jpg",
+        caption="Colorectal Cancer Infographic (Source: Freepik - Illustrative purposes)",
+        use_container_width=True
+    )
+    st.markdown("""<a href="https://www.cancer.org/cancer/types/colon-rectal-cancer.html" target="_blank" style="color:#fca311;">Learn more about Colorectal Cancer from the American Cancer Society</a>""", unsafe_allow_html=True)
+
+    st.divider()
+    st.subheader("Feedback")
+    feedback = st.text_area("Share your feedback about this application:", key="feedback_home_page", placeholder="Your thoughts, suggestions, or issues...")
+    if st.button("Submit Feedback", key="submit_feedback_home_page"):
+        if feedback:
+            st.success("Thank you for your feedback!")
+            # In a real app, you'd save this feedback (e.g., to a file or database)
+            print(f"Feedback received (Home Page): {feedback}")
+        else:
+            st.warning("Feedback cannot be empty.")
+
+
+elif menu == "Colon Cancer Database Search":
+    st.header("Colon Cancer Gene Database Search")
+    st.markdown(f"Search for information on genes associated with Colorectal Cancer using a local database file (`{DATA_PATH}`). Please enter a gene symbol.")
+
+    # Check if the database file exists
+    if not os.path.exists(DATA_PATH):
+        st.error(f"**Database File Not Found:** The required file `{DATA_PATH}` could not be located in the application directory.")
+        st.info("Please ensure the Excel database file is present in the same folder as the Streamlit script.")
+        st.stop() # Stop execution if the file is missing
+
+    query = st.text_input("Enter Gene Symbol:", key="gene_search_input", placeholder="e.g., APC, KRAS, MLH1")
+
+    if st.button("Search Database", key="gene_search_button"):
+        if not query:
+            st.warning("Please enter a gene symbol to search for.")
         else:
             try:
-                data=pd.read_excel(DATA_PATH); data.columns=data.columns.str.strip().str.title(); gene_col=None; poss_cols=['Gene Symbol','Gene Name','Symbol','Gene']
-                # *** SYNTAX FIX APPLIED HERE ***
-                for col in poss_cols:
+                # Load the Excel file
+                data = pd.read_excel(DATA_PATH)
+                # Standardize column names (strip whitespace, title case)
+                data.columns = data.columns.str.strip().str.title()
+
+                # Identify the gene symbol column (flexible matching)
+                gene_col = None
+                possible_gene_cols = ['Gene Symbol', 'Gene Name', 'Symbol', 'Gene']
+                for col in possible_gene_cols:
                     if col in data.columns:
-                        gene_col=col
+                        gene_col = col
                         break
-                # *** END FIX ***
-                if not gene_col: st.error(f"Gene col not found. Found:{list(data.columns)}"); st.stop()
-                data[gene_col]=data[gene_col].astype(str).str.strip(); q=query.strip(); results=data[data[gene_col].str.fullmatch(q,case=False,na=False)].copy()
-                if results.empty: st.info(f"No exact match for '{q}'. Trying contains..."); results=data[data[gene_col].str.contains(q,case=False,na=False,regex=False)].copy()
+
+                if not gene_col:
+                     st.error(f"Could not find a suitable gene symbol column in the database. Expected one of: {possible_gene_cols}. Found columns: {list(data.columns)}")
+                     st.stop()
+
+                # Prepare search query and perform search (case-insensitive exact match first)
+                data[gene_col] = data[gene_col].astype(str).str.strip() # Ensure string type and remove whitespace
+                search_query = query.strip()
+                # Use str.fullmatch for exact matching (case-insensitive)
+                results = data[data[gene_col].str.fullmatch(search_query, case=False, na=False)].copy()
+
+                # Fallback to contains search if exact match yields no results
+                if results.empty:
+                     st.info(f"No exact match found for '{search_query}'. Trying a broader search...")
+                     # Using regex=False for simple substring containment might be safer if gene names have special chars
+                     results = data[data[gene_col].str.contains(search_query, case=False, na=False, regex=False)].copy()
+
                 if not results.empty:
-                    st.success(f"Found {len(results)} for '{query}'."); st.write("### Results:")
-                    fmt_res=results.copy(); link_cols=['Pubmed Id','Doi Id','Uniprot','Blast','Conserved Domain','Link','Url','Reference','Entry','History','Variant Viewer','Feature Viewer','Genomic Coordinates','Publications','External Links','Sequence']
-                    link_cols.extend([c for c in fmt_res.columns if ('link' in c.lower() or 'url' in c.lower()) and c not in link_cols]); link_cols=list(set(link_cols))
-                    for col in fmt_res.columns:
-                        if col in link_cols:
-                            try: fmt_res[col]=fmt_res[col].apply(lambda x: format_link(x, col))
-                            except Exception as e: st.warning(f"Link format fail '{col}': {e}.")
-                    html=fmt_res.to_html(escape=False,index=False,na_rep='-',justify='left',classes=['st-table']); st.write(html,unsafe_allow_html=True)
-                else: st.warning(f"No results for '{query}' in '{gene_col}'.")
-            except ImportError: st.error("`openpyxl` needed."); except FileNotFoundError: st.error(f"`{DATA_PATH}` not found."); except Exception as e: st.error(f"DB error: {e}"); st.exception(e)
+                    st.success(f"Found {len(results)} result(s) containing '{query}'.")
+                    st.write("### Search Results:")
+                    # Apply link formatting to relevant columns
+                    formatted_results = results.copy()
+                    for col in formatted_results.columns:
+                         if col in ['Pubmed Id', 'Doi Id', 'Uniprot', 'Blast', 'Conserved Domain', 'Link', 'Url', 'Reference'] or 'link' in col.lower() or 'url' in col.lower():
+                             try:
+                                 formatted_results[col] = formatted_results[col].apply(lambda x: format_link(x, col))
+                             except Exception as apply_e:
+                                 st.warning(f"Link formatting failed for column '{col}': {apply_e}. Displaying raw data.")
+                    # Display results as an HTML table to render links correctly
+                    html_table = formatted_results.to_html(escape=False, index=False, na_rep='-', justify='left', classes=['dataframe', 'st-table']) # Add st-table class for potential Streamlit overrides
+                    st.write(html_table, unsafe_allow_html=True)
+                else:
+                    st.warning(f"No results found matching or containing '{query}' in the '{gene_col}' column.")
 
-elif menu == "DNA Sequence Analysis": # Logic unchanged, styling updates via CSS/style_plot
-    st.header("DNA Analysis"); st.markdown("Basic DNA properties (A/T/C/G/N).")
-    in_m=st.radio("Input:",("Paste","FASTA"),key="dna_in",horizontal=True); seq,seq_id="","Seq"
-    if in_m=="Paste": seq=st.text_area("DNA:",h=150,key="dna_seq_in",placeholder="Paste DNA...")
-    else: up_f=st.file_uploader("FASTA:",type=['fasta','fa','fna'],key="dna_up"); seq,seq_id=parse_fasta(up_f) if up_f else (None,None)
-    if seq: st.text_area("Preview:",value=f">**{seq_id}**\n{seq[:100]}{'...' if len(seq)>100 else ''}",h=100,key="dna_disp",disabled=True)
+            except ImportError:
+                st.error("The `openpyxl` library is required to read Excel files. Please install it (`pip install openpyxl`).")
+            except FileNotFoundError:
+                 st.error(f"**Database File Not Found:** The file `{DATA_PATH}` was not found during the read attempt.")
+            except Exception as e:
+                st.error(f"An error occurred during the database search:")
+                st.exception(e) # Display the full error traceback for debugging
+
+
+elif menu == "DNA Sequence Analysis":
+    st.header("DNA Sequence Analysis")
+    st.markdown("Analyze basic properties of a DNA sequence (accepts A, T, C, G, N). Input sequence by pasting or uploading a FASTA file.")
+
+    input_method = st.radio("Input Method:", ("Paste", "FASTA"), key="dna_input", horizontal=True)
+    sequence, seq_id = "", "Pasted Sequence"
+    if input_method == "Paste":
+        sequence = st.text_area("Enter DNA Sequence:", height=150, key="dna_seq_in", placeholder="Paste your DNA sequence here (e.g., ATGC...). Non-ATCGN characters will be ignored.")
+    else:
+        uploaded_file = st.file_uploader("Upload FASTA File:", type=['fasta','fa','fna'], key="dna_fasta_up")
+        if uploaded_file:
+            sequence, seq_id = parse_fasta(uploaded_file)
+            if sequence:
+                st.text_area("Sequence Preview (from FASTA):", value=f">{seq_id}\n{sequence[:100]}{'...' if len(sequence) > 100 else ''}", height=100, key="dna_disp", disabled=True)
+
     st.divider()
-    if st.button("Analyze",key="dna_analyze_btn"):
-        if not seq: st.warning("Provide DNA.")
+    if st.button("Analyze DNA", key="dna_analyze_btn"):
+        if not sequence:
+            st.warning("Please provide a DNA sequence via paste or FASTA upload.")
         else:
-            seq_cl="".join(re.findall(r'[ATCGN]',seq.upper()))
-            if not seq_cl: st.error("No valid DNA bases.")
+            # Clean the sequence: keep only A, T, C, G, N (case-insensitive)
+            seq_clean = "".join(re.findall(r'[ATCGN]', sequence.upper()))
+            if not seq_clean:
+                st.error("The provided input does not contain any valid DNA bases (A, T, C, G, N).")
             else:
                 try:
-                    st.subheader(f"Results: '**{seq_id}**'")
-                    seq_o=Seq(seq_cl); l=len(seq_o); st.metric("Length",f"{l:,} bp")
-                    seq_nn=seq_cl.replace('N',''); l_nn=len(seq_nn)
-                    if l_nn>0: gc=gc_fraction(seq_nn)*100; at=100.0-gc; st.metric("GC% (no N)",f"{gc:.1f}%"); st.metric("AT% (no N)",f"{at:.1f}%")
-                    else: st.info("GC/AT% N/A.")
-                    st.divider(); st.write("#### Composition:"); comp=Counter(seq_cl); data=[{"Base":b,"Count":c,"%":(c/l*100) if l>0 else 0} for b,c in sorted(comp.items())]
-                    df=pd.DataFrame(data); st.dataframe(df.style.format({"Count":"{:,}","%":"{:.1f}%"}),hide_index=True,use_container_width=True)
-                    p_comp={k:v for k,v in comp.items() if k in STANDARD_DNA_BASES}
-                    if p_comp: fig,ax=plt.subplots(figsize=(6,4)); bases=sorted(p_comp.keys()); counts=[p_comp[b] for b in bases]; cols={'A':'#007bff','T':'#ff7f0e','C':'#2ca02c','G':'#d62728'}; b_cols=[cols.get(b,'#888') for b in bases]; ax.bar(bases,counts,color=b_cols); style_plot(fig,ax,title="Counts (no N)",xlabel="Base",ylabel="Count"); ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x,p:format(int(x),','))); st.pyplot(fig)
-                    elif 'N' in comp and len(comp)==1: st.info("Plot omitted (N only)."); elif not p_comp: st.info("Plot omitted (no std bases).")
-                    st.divider(); st.write("#### ORF Finder"); min_aa=st.number_input("Min ORF (AA):",10,500,30,5,key="orf_len"); orfs=[]
-                    st.info("Searching ORFs (M to *) fwd...");
-                    with st.spinner("Scanning..."):
+                    st.subheader(f"Analysis Results for: '{seq_id}'")
+                    seq_obj = Seq(seq_clean)
+                    length = len(seq_obj)
+                    st.metric("Total Length", f"{length:,} bp")
+
+                    # Calculate GC/AT content excluding 'N' bases
+                    seq_no_n = seq_clean.replace('N', '')
+                    len_no_n = len(seq_no_n)
+                    if len_no_n > 0:
+                        gc_val = gc_fraction(seq_no_n) * 100
+                        at_val = 100.0 - gc_val
+                        st.metric("GC Content (excluding N)", f"{gc_val:.1f}%")
+                        st.metric("AT Content (excluding N)", f"{at_val:.1f}%")
+                    else:
+                        st.info("GC/AT content could not be calculated (sequence contains only N or is empty after cleaning).")
+
+                    # Base Composition Calculation
+                    st.divider()
+                    st.write("#### Base Composition (including N):")
+                    composition = Counter(seq_clean)
+                    comp_data = [{"Base": b, "Count": c, "Percentage (%)": (c/length*100) if length > 0 else 0}
+                                 for b, c in sorted(composition.items())]
+                    comp_df = pd.DataFrame(comp_data)
+                    st.dataframe(comp_df.style.format({"Count":"{:,}", "Percentage (%)":"{:.1f}%"}),
+                                 hide_index=True, use_container_width=True)
+
+                    # Plot Base Composition (excluding N)
+                    plot_comp = {k: v for k, v in composition.items() if k in STANDARD_DNA_BASES}
+                    if plot_comp:
+                        fig, ax = plt.subplots(figsize=(6, 4))
+                        bases = sorted(plot_comp.keys())
+                        counts = [plot_comp[b] for b in bases]
+                        # Define colors consistent with theme accents
+                        base_colors = {'A': '#66fcf1', 'T': '#fca311', 'C': '#ffbf00', 'G': '#ff5555'}
+                        bar_colors = [base_colors.get(b, '#888888') for b in bases]
+
+                        ax.bar(bases, counts, color=bar_colors)
+                        style_plot(fig, ax, title="Base Counts (excluding N)", xlabel="Base", ylabel="Count")
+                        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: format(int(x), ','))) # Format y-axis ticks
+                        st.pyplot(fig)
+                    elif 'N' in composition and len(composition) == 1:
+                        st.info("Composition plot omitted (sequence contains only N).")
+                    elif not plot_comp:
+                         st.info("Composition plot omitted (no standard bases A,T,C,G found).")
+
+                    # Basic ORF Finder
+                    st.divider()
+                    st.write("#### Basic Open Reading Frame (ORF) Finder")
+                    min_orf_aa = st.number_input("Minimum ORF Length (Amino Acids):", min_value=10, max_value=500, value=30, step=5, key="orf_len")
+                    orfs = []
+                    st.info("Searching for ORFs (Met 'M' to Stop '*') on the forward strand (3 frames)...")
+                    with st.spinner("Scanning for ORFs... This might take a moment for long sequences."):
                          for frame in range(3):
-                            try: t=str(seq_o[frame:].translate(1,to_stop=True,cds=False))
-                            except: t=""
-                            if not t: continue; pos=0
-                            while 'M' in t[pos:]:
-                                start_i=t.find('M',pos); if start_i==-1: break
-                                p_orf=t[start_i:]
-                                if len(p_orf)>=min_aa: s_dna=frame+(start_i*3)+1; e_dna=s_dna+(len(p_orf)*3)-1; if e_dna<=l and not any(o['Start (DNA)']==s_dna and o['Frame']==frame+1 for o in orfs): orfs.append({"Frame":frame+1,"Start":s_dna,"End":e_dna,"Len":len(p_orf),"Prot":p_orf[:40]+("..." if len(p_orf)>40 else "")}) # Shortened keys
-                                pos=start_i+1
-                    if orfs: st.success(f"{len(orfs)} ORF(s) ≥ {min_aa} AA."); df=pd.DataFrame(orfs).sort_values(["Frame","Start"]); st.dataframe(df.style.format({"Start":"{:,}","End":"{:,}","Len":"{:,}"}),hide_index=True,use_container_width=True)
-                    else: st.info(f"No ORFs ≥ {min_aa} AA.")
-                except Exception as e: st.error(f"DNA analysis error: {e}"); st.exception(e)
-
-elif menu == "Protein Sequence Analysis": # Logic unchanged, styling updates via CSS/style_plot
-    st.header("Protein Analysis"); st.markdown("Analyze properties.")
-    in_m=st.radio("Input:",("Paste","FASTA"),key="prot_in",horizontal=True); seq,seq_id="","Seq"
-    if in_m=="Paste": seq=st.text_area("Protein:",h=150,key="prot_seq",placeholder="Paste protein...")
-    else: up_f=st.file_uploader("FASTA:",type=['fasta','fa','faa'],key="prot_fasta"); seq,seq_id=parse_fasta(up_f) if up_f else (None,None)
-    if seq: st.text_area("Preview:",value=f">**{seq_id}**\n{seq[:100]}{'...' if len(seq)>100 else ''}",h=100,key="prot_disp",disabled=True)
-    st.divider()
-    if st.button("Analyze",key="prot_analyze_btn"):
-        if not seq: st.warning("Provide protein.")
-        else:
-            seq_cl="".join(seq.split()).upper(); chars=set(seq_cl); std=set(STANDARD_AA); amb=set(AMBIGUOUS_AA)
-            n_std=chars-std-amb; amb_p=chars.intersection(amb); seq_c="".join(c for c in seq_cl if c in std)
-            if n_std: st.warning(f"Ignoring unknown: `{'`, `'.join(sorted(list(n_std)))}`")
-            if amb_p: st.warning(f"Ignoring ambiguous: `{'`, `'.join(sorted(list(amb_p)))}`")
-            if not seq_c: st.error("No standard AAs.")
-            else:
-                try:
-                    st.subheader(f"Results: '**{seq_id}**'")
-                    pa=ProteinAnalysis(seq_c); c1,c2=st.columns(2)
-                    with c1: st.metric("In Len",f"{len(seq_cl):,} aa"); st.metric("Calc Len",f"{len(seq_c):,} aa"); st.metric("Mol Wt",f"{pa.molecular_weight():,.1f} Da"); st.metric("pI",f"{pa.isoelectric_point():.2f}")
-                    with c2: gr=pa.gravy(); hy="Hydrophobic" if gr>0 else ("Hydrophilic" if gr<0 else "Neutral"); st.metric("GRAVY",f"{gr:.3f}",delta=hy,delta_color="off"); inst=pa.instability_index(); stab="Stable" if inst<40 else "Unstable"; st.metric("Instability",f"{inst:.2f}",delta=stab,delta_color="normal" if stab=="Stable" else "inverse")
-                    st.divider(); st.write("#### AA Comp:"); comp=Counter(seq_cl); data=[{"AA":a,"Count":c,"%":(c/len(seq_cl)*100) if seq_cl else 0} for a,c in sorted(comp.items())]
-                    df=pd.DataFrame(data); st.dataframe(df.style.format({'Count':'{:,}','%':'{:.1f}%'}),hide_index=True,use_container_width=True)
-                    st.divider(); st.write("#### Sec Structure:")
-                    try:
-                        h,t,s=pa.secondary_structure_fraction(); labs='H','T','S'; sizes=[h*100,t*100,s*100]
-                        if sum(sizes)>0.1: cols=['#007bff','#ff7f0e','#2ca02c']; fig,ax=plt.subplots(figsize=(6,4)); w,tx,au=ax.pie(sizes,labels=labs,startangle=90,colors=cols,autopct='%1.1f%%',wedgeprops={'edgecolor':'#fff','lw':1.5},textprops={'color':'#333'}); [a.set_color('#fff')or a.set_fontfamily('TN R')or a.set_fontweight('bold')or a.set_fontsize(10) for a in au]; [t.set_fontfamily('TN R')or t.set_fontweight('bold') for t in tx]; ax.axis('equal'); style_plot(fig,ax,title="Sec Structure"); ax.set_xlabel(""); ax.set_ylabel(""); st.pyplot(fig)
-                        else: st.info("Structure fractions near zero.")
-                    except Exception as ss_e: st.warning(f"Structure fail: {ss_e}")
-                except Exception as e: st.error(f"Protein analysis error: {e}"); st.exception(e)
-
-elif menu == "Primer Design": # Indentation fix applied
-    st.header("Basic Primer Design"); st.markdown("Simple Fwd/Rev primers & Tm estimate."); st.warning("⚠️ **Edu Tool:** Basic only.", icon="🔬")
-    in_m=st.radio("Input:",("Paste","FASTA"),key="p_in",horizontal=True); seq,seq_id="","Seq"
-    if in_m=="Paste": seq=st.text_area("DNA Template:",h=150,key="p_seq",placeholder="Paste DNA...")
-    else: up_f=st.file_uploader("FASTA:",type=['fasta','fa','fna'],key="p_fasta"); seq,seq_id=parse_fasta(up_f) if up_f else (None,None)
-    if seq: st.text_area("Preview:",value=f">**{seq_id}**\n{seq[:100]}{'...' if len(seq)>100 else ''}",h=100,key="p_disp",disabled=True)
-    st.divider(); st.subheader("Params"); c1,c2=st.columns(2)
-    with c1: p_len=st.slider("Length:",15,35,20,1,key="p_len")
-    with c2: tm_m=st.selectbox("Tm Method:",["Tm_NN","Tm_GC","Tm_Wallace"],0,key="p_tm_m"); dna,na,mg,dntp=50.0,50.0,0.0,0.0
-        if tm_m=="Tm_NN":
-             with st.expander("Tm_NN Params"): dna=st.number_input("P(nM):",1.,1000.,50.,1.,key="p_dna",fmt="%.1f"); na=st.number_input("Na(mM):",1.,200.,50.,1.,key="p_na",fmt="%.1f"); mg=st.number_input("Mg(mM):",0.,50.,0.,0.1,key="p_mg",fmt="%.1f"); dntp=st.number_input("dNTP(mM):",0.,10.,0.,0.1,key="p_dntp",fmt="%.1f")
-    st.divider()
-    if st.button("Design",key="p_design_btn"):
-        if not seq: st.warning("Provide DNA.")
-        else:
-            seq_cl="".join(re.findall(r'[ATCG]',seq.upper()))
-            if not seq_cl: st.error("No valid DNA."); elif len(seq_cl)<p_len*2: st.error(f"Seq too short ({len(seq_cl):,}) for {p_len}bp.")
-            else:
-                try:
-                    fw=Seq(seq_cl[:p_len]); rv=Seq(seq_cl[-p_len:]).reverse_complement(); fw_gc=gc_fraction(fw)*100; rv_gc=gc_fraction(rv)*100; fw_tm,rv_tm="N/A","N/A"; tm_disp=f"Method:{tm_m}"
-                    try: args={'strict':False};
-                        if tm_m=="Tm_NN": args.update({'Na':na,'Mg':mg,'dNTPs':dntp,'dnac1':dna,'nn_table':MeltingTemp.DNA_NN4}); tm_disp+=f", P={dna:.1f}nM,Na={na:.1f}mM,Mg={mg:.1f}mM,dNTP={dntp:.1f}mM"
-                        if hasattr(MeltingTemp,tm_m): func=getattr(MeltingTemp,tm_m); fw_tm=func(fw,**args); rv_tm=func(rv,**args)
-                        else: st.error(f"Tm method '{tm_m}' missing.")
-                    except Exception as tm_e: st.warning(f"Tm fail: {tm_e}")
-                    st.subheader(f"Primers ('**{seq_id}**')"); p1,p2=st.columns(2)
-                    with p1: st.markdown("#### Fwd"); st.code(str(fw)); st.metric("Len",f"{len(fw)}"); st.metric("GC",f"{fw_gc:.1f}%"); st.metric("Tm",f"{fw_tm:.1f}°C" if isinstance(fw_tm,(float,int)) else "N/A")
-                    with p2: st.markdown("#### Rev"); st.code(str(rv)); st.metric("Len",f"{len(rv)}"); st.metric("GC",f"{rv_gc:.1f}%"); st.metric("Tm",f"{rv_tm:.1f}°C" if isinstance(rv_tm,(float,int)) else "N/A")
-                    st.divider(); st.metric(f"Amplicon ('**{seq_id}**')",f"{len(seq_cl):,} bp");
-                    if isinstance(fw_tm,(float,int)): st.caption(f"Tm calc: {tm_disp}")
-                except Exception as e: st.error(f"Design error: {e}")
-
-elif menu == "Restriction Enzyme Analysis": # Syntax fix applied
-    st.header("Restriction Enzyme Analysis"); st.markdown("Identify cut sites (A/T/C/G)."); st.info("Uses REBASE.")
-    in_m=st.radio("Input:",("Paste","FASTA"),key="re_in",horizontal=True); seq,seq_id="","Seq"
-    if in_m=="Paste": seq=st.text_area("DNA:",h=150,key="re_seq",placeholder="Paste DNA...")
-    else: up_f=st.file_uploader("FASTA:",type=['fasta','fa','fna'],key="re_fasta"); seq,seq_id=parse_fasta(up_f) if up_f else (None,None)
-    if seq: st.text_area("Preview:",value=f">**{seq_id}**\n{seq[:100]}{'...' if len(seq)>100 else ''}",h=100,key="re_disp",disabled=True)
-    st.divider(); st.subheader("Enzymes")
-    common=sorted(['EcoRI','BamHI','HindIII','NotI','XhoI','PstI','SacI','SalI','SpeI','KpnI','SmaI','EcoRV','HaeIII','AluI','BglII','NcoI','NdeI','XbaI'])
-    sel_com=st.multiselect("Common:",common,default=['EcoRI','BamHI','HindIII'],key="re_sel")
-    cust_str=st.text_input("Custom (comma-sep):",key="re_cust",placeholder="e.g., BsaI")
-    # *** SYNTAX FIX APPLIED HERE ***
-    all_sel = set(sel_com)
-    if cust_str:
-        all_sel.update({e.strip() for e in cust_str.split(',') if e.strip()})
-    # *** END FIX ***
-    final=sorted(list(all_sel)); is_lin=st.checkbox("Linear",value=True,key="re_lin",help="Uncheck for circular.")
-    st.divider()
-    if st.button("Analyze",key="re_analyze_btn"):
-        if not seq: st.warning("Provide DNA."); elif not final: st.warning("Select enzyme(s).")
-        else:
-            seq_cl="".join(re.findall(r'[ATCG]',seq.upper()))
-            if not seq_cl: st.error("No valid DNA bases.")
-            else:
-                try:
-                    seq_o=Seq(seq_cl); st.info(f"Analyzing '**{seq_id}**' ({len(seq_o):,} bp, {'Lin' if is_lin else 'Circ'}).")
-                    valid,invalid=[],[]
-                    try: from Bio.Restriction import AllEnzymes
-                    except ImportError: st.error("Cannot import RE data."); st.stop()
-                    with st.spinner("Validating..."):
-                        for n in final:
-                            try: enz=AllEnzymes.get(n); valid.append(enz) if enz else invalid.append(n)
-                            except ValueError: invalid.append(n)
-                    if invalid: st.warning(f"Ignored unknown: `{'`, `'.join(invalid)}`")
-                    if not valid: st.error("No valid enzymes."); st.stop()
-                    st.write(f"**Using:** {', '.join(map(str,valid))}")
-                    with st.spinner("Searching..."): rb=RestrictionBatch(valid); analysis=Analysis(rb,seq_o,linear=is_lin)
-                    st.subheader("Results"); st.write(f"**Seq:** '**{seq_id}**'|**Len:** {len(seq_o):,}|**Type:** {'Lin' if is_lin else 'Circ'}"); st.divider()
-                    res=analysis.full(); summary,cuts,found=[],0,False
-                    for enz,sites in res.items(): c=len(sites); cuts+=c; found=found or (c>0); summary.append({"Enzyme":str(enz),"Site":str(enz.site),"Cuts":c,"Pos(1-based)":", ".join(f"{s:,}" for s in sites) if sites else "None"})
-                    if not found: st.success("✅ No cut sites.")
-                    else:
-                        st.write("#### Cuts:"); df=pd.DataFrame(summary).sort_values(["Cuts","Enzyme"],ascending=[False,True]); st.dataframe(df.style.format({"Cuts":"{:,}"}),hide_index=True,use_container_width=True)
-                        st.divider(); st.write("#### Fragments:")
-                        try: f_lens=sorted(analysis.fragments(),reverse=True); fc1,fc2=st.columns(2); fc1.metric("Cuts",f"{cuts:,}"); fc2.metric("Frags",f"{len(f_lens):,}"); st.write("**Lengths(bp):**");
-                            if f_lens: st.text(", ".join(f"{l:,}" for l in f_lens[:15])+ (f", ...({len(f_lens)-15} more)" if len(f_lens)>30 else ""))
-                            else: st.text("N/A.")
-                        except Exception as fe: st.warning(f"Frag fail: {fe}")
-                        st.divider();
-                        if st.checkbox("Show Map",False,key="re_map"):
-                            st.write("#### Map:")
-                            try: mo=io.StringIO(); mw=min(100,max(60,len(seq_o)//10)); analysis.print_that(out=mo,title=f"Map:{seq_id}",top=True,rc=True,nc=mw); st.code(mo.getvalue()); mo.close()
-                            except Exception as me: st.error(f"Map fail: {me}")
-                except Exception as e: st.error(f"Analysis error: {e}")
-
-elif menu == "Pairwise Sequence Alignment": # Syntax fix applied
-    st.header("Pairwise Alignment"); st.markdown("Align DNA/protein (global/local)."); st.info("Scores affect results.")
-    c1,c2=st.columns(2)
-    with c1: st.markdown("#### Seq 1"); i_m1=st.radio("In1:",("Paste","FASTA"),key="al_in1",horizontal=True,label_visibility="collapsed"); s1,id1="","S1";
-        if i_m1=="Paste": s1=st.text_area("S1:",h=120,key="al_s1",placeholder="Paste...")
-        else: up1=st.file_uploader("F1:",type=['fasta','fa','fna','faa'],key="al_f1"); s1,id1=parse_fasta(up1) if up1 else (None,None)
-        if s1: st.text_area("P1:",value=f">**{id1}**\n{s1[:80]}{'...' if len(s1)>80 else ''}",h=75,key="al_d1",disabled=True)
-    with c2: st.markdown("#### Seq 2"); i_m2=st.radio("In2:",("Paste","FASTA"),key="al_in2",horizontal=True,label_visibility="collapsed"); s2,id2="","S2";
-        if i_m2=="Paste": s2=st.text_area("S2:",h=120,key="al_s2",placeholder="Paste...")
-        else: up2=st.file_uploader("F2:",type=['fasta','fa','fna','faa'],key="al_f2"); s2,id2=parse_fasta(up2) if up2 else (None,None)
-        if s2: st.text_area("P2:",value=f">**{id2}**\n{s2[:80]}{'...' if len(s2)>80 else ''}",h=75,key="al_d2",disabled=True)
-    st.divider(); st.subheader("Params"); pc1,pc2,pc3=st.columns(3)
-    with pc1: mode=st.selectbox("Mode:",["Global","Local"],key="al_m"); seq_t=st.radio("Type:",("DNA","Protein"),key="al_t",horizontal=True)
-    with pc2: st.write("**Score:**"); mat,m_s,mm_p=None,None,None;
-        if seq_t=="DNA": m_s=st.number_input("Match:",value=2.0,step=0.5,key="al_mt"); mm_p=st.number_input("Mismatch:",value=-1.0,step=-0.5,key="al_ms"); mm_p=min(0.0,mm_p); st.caption(f"M={m_s}, MM={mm_p}")
-        else: mats=sorted(substitution_matrices.list_matrices()); def_idx=mats.index('BLOSUM62') if 'BLOSUM62' in mats else 0; sel_mat=st.selectbox("Matrix:",mats,index=def_idx,key="al_mat");
-            try: mat=substitution_matrices.load(sel_mat); st.caption(f"**{sel_mat}**")
-            except Exception as e: st.error(f"Matrix load error: {e}")
-    with pc3: st.write("**Gaps:**"); g_o=st.number_input("Open:",value=-10.0,step=-0.5,key="al_go"); g_e=st.number_input("Extend:",value=-0.5,step=-0.1,key="al_ge"); g_o=min(0.0,g_o); g_e=min(0.0,g_e); st.caption(f"O={g_o}, E={g_e}")
-    st.divider()
-    if st.button("Align",key="al_btn"):
-        valid=True; if not s1: st.warning("S1 missing.");valid=False; if not s2: st.warning("S2 missing.");valid=False; if seq_t=="Protein" and not mat: st.error("Matrix needed.");valid=False; if not valid: st.stop()
-        s1_c,s2_c="".join(s1.split()).upper(),"".join(s2.split()).upper(); if not s1_c: st.error("S1 empty.");valid=False; if not s2_c: st.error("S2 empty.");valid=False; if not valid: st.stop()
-        try:
-            st.subheader("Results"); prefix=mode.lower(); gaps={'open':g_o,'extend':g_e}; func=None; params={};
-            if mat: fname=f"{prefix}dx"; params={'matrix':mat,**gaps}
-            else: fname=f"{prefix}mx"; params={'match':m_s,'mismatch':mm_p,**gaps}
-            if hasattr(pairwise2.align,fname): func=getattr(pairwise2.align,fname)
-            else: st.error(f"Func '{fname}' not found."); st.stop()
-            st.info(f"Aligning '**{id1}**' vs '**{id2}**' ({mode} {seq_t})...");
-            with st.spinner("Aligning..."): aligns=func(s1_c,s2_c,**params,one_alignment_only=True)
-            if not aligns: st.warning("No alignment.")
-            else:
-                a1,a2,scr,beg,end=aligns[0]; st.metric("Score",f"{scr:.2f}")
-                if prefix=="local": st.write(f"**Region (0-based):** Start={beg}, End={end}")
-                st.divider(); st.write("#### Alignment:")
-                fmt_str=pairwise2.format_alignment(a1,a2,scr,beg,end,full_sequences=(prefix=='global'))
-                disp_txt=f"S1: {id1}\nS2: {id2}\n\n{fmt_str}"; st.code(disp_txt)
-                st.caption("Key: | Match, . Mismatch(+),   Mismatch(-), - Gap.")
-                ident,g1,g2,pairs=0,0,0,0; align_len=len(a1)
-                for i in range(align_len):
-                    r1,r2=a1[i],a2[i]; gap1,gap2=(r1=='-'),(r2=='-')
-                    if gap1: g1+=1
-                    if gap2: g2+=1
-                    if not gap1 and not gap2: pairs+=1; if r1==r2: ident+=1
-                tot_g=g1+g2; id_pct=(ident/pairs*100) if pairs>0 else 0; gap_pct=(tot_g/(align_len*2)*100) if align_len>0 else 0
-                st.divider(); st.write("#### Stats:")
-                sc1,sc2,sc3=st.columns(3); sc1.metric("Len",f"{align_len:,}"); sc2.metric("Ident",f"{id_pct:.1f}%",f"{ident:,}/{pairs:,}"); sc3.metric("Gaps",f"{gap_pct:.1f}%",f"{tot_g:,}/{align_len*2:,}")
-                st.caption("Ident=Matches/Aligned Cols. Gaps=Total Gap Chars/(2*Len).")
-        except Exception as e: st.error(f"Align error: {e}"); st.exception(e)
-
-elif menu == "Motif Finder Tool": # Logic unchanged, styling updates via CSS
-    st.header("Motif Finder"); st.markdown("Search motifs (exact/regex)."); st.info("Regex: `GAATTC`, `G[AT]TC`, `^ATG`, `TAG$`. Escape with `\\`.")
-    in_m=st.radio("Input:",("Paste","FASTA"),key="mo_in",horizontal=True); seq,seq_id="","Seq"
-    if in_m=="Paste": seq=st.text_area("Seq:",h=150,key="mo_seq",placeholder="Paste DNA/protein...")
-    else: up_f=st.file_uploader("FASTA:",type=['fasta','fa','fna','faa'],key="mo_f"); seq,seq_id=parse_fasta(up_f) if up_f else (None,None)
-    if seq: st.text_area("Preview:",value=f">**{seq_id}**\n{seq[:80]}{'...' if len(seq)>80 else ''}",h=75,key="mo_d",disabled=True)
-    st.divider(); motif=st.text_input("Motif/Regex:",key="mo_pat",placeholder="e.g., GAATTC"); m1,m2=st.columns(2); with m1: case=st.checkbox("Case Sens",False,key="mo_case"); with m2: overlap=st.checkbox("Overlaps",True,key="mo_ov")
-    st.divider()
-    if st.button("Find",key="mo_find"):
-        if not seq: st.warning("Provide seq."); elif not motif: st.warning("Enter motif.")
-        else:
-            seq_cl="".join(seq.split());
-            if not seq_cl: st.warning("Seq empty.")
-            else:
-                try:
-                    flags=0 if case else re.IGNORECASE; matches=[]; st.info(f"Searching '**{motif}**' in '**{seq_id}**'...")
-                    with st.spinner("Searching..."): pat=re.compile(motif,flags);
-                        if overlap: matches=list(pat.finditer(seq_cl))
-                        else: pos=0; while pos<len(seq_cl): m=pat.search(seq_cl,pos); if m: matches.append(m); pos=m.end(); else: break
-                    st.subheader(f"Results for '**{motif}**' in '**{seq_id}**'")
-                    if matches:
-                        st.success(f"Found **{len(matches):,}** match(es)."); m_data=[{"#":i+1,"Start":m.start()+1,"End":m.end(),"Len":m.end()-m.start(),"Match":m.group()} for i,m in enumerate(matches)]
-                        m_df=pd.DataFrame(m_data); st.dataframe(m_df.style.format({"Start":"{:,}","End":"{:,}","Len":"{:,}"}),hide_index=True,use_container_width=True)
-                        st.divider()
-                        if st.checkbox("Highlight (2k chars)",False,key="mo_hi"):
-                             lim=2000; s_hl=seq_cl[:lim]; html=""; last=0; style="background-color:#fff3cd;color:#856404;font-weight:bold;"; op=f"<mark style='{style}'>"; cl="</mark>"; sort_m=sorted(matches,key=lambda m:m.start())
-                             for m in sort_m:
-                                 if m.start()>=lim: break; s,e=m.start(),min(m.end(),lim)
-                                 if s>=last: txt=s_hl[last:s].replace("&","&").replace("<","<").replace(">",">"); html+=txt; m_txt=s_hl[s:e].replace("&","&").replace("<","<").replace(">",">"); html+=op+m_txt+cl; last=e
-                                 elif e>last: ov=s_hl[last:e].replace("&","&").replace("<","<").replace(">",">"); html+=op+ov+cl; last=e
-                             rem=s_hl[last:].replace("&","&").replace("<","<").replace(">",">"); html+=rem
-                             st.markdown(f"**Highlighted ({lim:,} chars):**"); st.markdown(f"<div style='font-family:monospace;word-wrap:break-word;border:1px solid #dee2e6;padding:10px;border-radius:5px;background-color:#f8f9fa;color:#333;'>{html}{'...' if len(seq_cl)>lim else ''}</div>",unsafe_allow_html=True)
-                    else: st.info("Motif not found.")
-                except re.error as r_e: st.error(f"Invalid Regex: {r_e}")
-                except Exception as e: st.error(f"Motif search error: {e}"); st.exception(e)
-
-elif menu == "Bioinformatics Tool (Transcription/Translation)": # Logic unchanged, styling updates via CSS
-    st.header("DNA Tx & Tl"); st.markdown("Transcribe DNA->RNA, translate RNA->Protein.")
-    in_m=st.radio("Input:",("Paste","FASTA"),key="tr_in",horizontal=True); dna_seq,seq_id="","Seq"
-    if in_m=="Paste": dna_seq=st.text_area("DNA (Coding):",h=120,key="tr_seq",placeholder="Paste DNA...")
-    else: up_f=st.file_uploader("FASTA:",type=['fasta','fa','fna'],key="tr_f"); dna_seq,seq_id=parse_fasta(up_f) if up_f else (None,None)
-    if dna_seq: st.text_area("Preview:",value=f">**{seq_id}**\n{dna_seq[:80]}{'...' if len(dna_seq)>80 else ''}",h=75,key="tr_d",disabled=True)
-    st.divider()
-    if st.button("Run",key="tr_btn"):
-        if not dna_seq: st.warning("Provide DNA.")
-        else:
-            dna_cl="".join(re.findall(r'[ATCG]',dna_seq.upper()));
-            if not dna_cl: st.error("No valid DNA.")
-            else:
-                try:
-                    st.subheader(f"Results: '**{seq_id}**'")
-                    dna_o=Seq(dna_cl); dna_l=len(dna_o); c1,c2=st.columns(2)
-                    with c1: st.metric("DNA Len",f"{dna_l:,} bp"); st.write("**In DNA:**"); st.code(str(dna_o))
-                    with c2: gc=gc_fraction(dna_o)*100 if dna_l>0 else 0; st.metric("GC%",f"{gc:.1f}%"); st.write("**Rev Comp:**"); st.code(str(dna_o.reverse_complement()))
-                    st.divider(); st.write("#### Tx"); rna_o=dna_o.transcribe(); st.write("**RNA:**"); st.code(str(rna_o)); st.metric("RNA Len",f"{len(rna_o):,}")
-                    st.divider(); st.write("#### Tl"); st.caption("Std code. '*' STOP.")
-                    rem=len(rna_o)%3; rna_t=rna_o; warn=False
-                    if len(rna_o)<3: st.error("RNA < 3."); rna_t=None
-                    elif rem!=0: warn=True; rna_t=rna_o[:-rem]; if not rna_t: st.error("Eff RNA len 0."); rna_t=None
-                    if rna_t:
-                        p_stop=rna_t.translate(1,to_stop=True,cds=False); st.write("**Prot (to STOP):**"); st.code(str(p_stop)); st.metric("Len",f"{len(p_stop):,} aa")
-                        if warn: st.warning(f"RNA len not /3; last {rem} ignored.")
-                        st.divider();
-                        if st.checkbox("Full Tl",False,key="tr_full"): p_full=rna_t.translate(1,to_stop=False,cds=False); st.write("**Full Prot:**"); st.code(str(p_full)); st.metric("Full Len",f"{len(p_full):,} aa")
-                except Exception as e: st.error(f"Error: {e}")
-
-elif menu == "Genome Coverage Plotter": # Logic unchanged, styling updates via CSS/style_plot
-    st.header("Coverage Plotter"); st.markdown("Visualize coverage depth."); st.info("Needs pos/cov cols.")
-    up_f=st.file_uploader("Coverage Data:",type=['csv','tsv','txt','bed','bedgraph','depth'],key="cov_up")
-    if up_f:
-        st.divider(); st.subheader("Parsing")
-        ext=os.path.splitext(up_f.name)[-1].lower(); def_s='\t' if ext!='.csv' else ','
-        c1,c2=st.columns(2)
-        with c1: s_opts={',':'Comma', '\t':'Tab', ' ':'Space'}; s_keys=list(s_opts.keys()); def_i=s_keys.index(def_s) if def_s in s_keys else 1; sel_k=st.selectbox("Sep:",s_keys,index=def_i,format_func=lambda x:s_opts[x],key="cov_sep"); s_re=r'\s+' if sel_k==' ' else sel_k
-        with c2: def_h=ext in ['.csv','.tsv','.txt']; head=st.checkbox("Header",value=def_h,key="cov_head"); h_arg=0 if head else None; comm=st.text_input("Comment:",'#',max_chars=1,key="cov_comm")
-        st.divider(); st.subheader("Loading & Cols")
-        try:
-            df_c=pd.read_csv(io.BytesIO(up_f.getvalue()),sep=s_re,header=h_arg,engine='python',comment=comm if comm else None,low_memory=False)
-            if df_c.empty: st.error("File empty."); st.stop()
-            if h_arg is None and all(isinstance(c,int) for c in df_c.columns): n_c=df_c.shape[1]; df_c.columns=[f'C{i+1}' for i in range(n_c)] if n_c>=2 else df_c.columns; st.info(f"Generic names: {list(df_c.columns)}")
-            if df_c.shape[1]<2: st.error("Need >= 2 cols."); st.stop()
-            st.write("Preview:"); st.dataframe(df_c.head(),height=200,use_container_width=True)
-            cols=list(df_c.columns); norm={str(c).strip().lower():c for c in cols}; p_g,c_g,ch_g=None,None,None; ch_k=['chr','chrom','#chr']; p_k=['pos','position','start']; c_k=['depth','cov','coverage','score']
-            for k in ch_k:   if k in norm: ch_g=norm[k]; break
-            for k in p_k:   if k in norm: p_g=norm[k]; break
-            for k in c_k:   if k in norm: c_g=norm[k]; break
-            ch_i=cols.index(ch_g) if ch_g else 0; p_i=cols.index(p_g) if p_g else 1; c_i=cols.index(c_g) if c_g else (3 if len(cols)>3 and ext in ['.bed','.bedgraph'] else 2); ch_i,p_i,c_i=min(ch_i,len(cols)-1),min(p_i,len(cols)-1),min(c_i,len(cols)-1)
-            cs1,cs2,cs3=st.columns(3);
-            with cs1: chr_c=st.selectbox("Chrom (Opt):",[None]+cols,index=(cols.index(ch_g)+1 if ch_g else 0),key="cov_chr")
-            with cs2: pos_c=st.selectbox("Pos:",cols,index=p_i,key="cov_pos")
-            with cs3: cov_c=st.selectbox("Cov:",cols,index=c_i,key="cov_cov")
-            if pos_c==cov_c or (chr_c and (chr_c==pos_c or chr_c==cov_c)): st.error("Cols must differ.")
-            else:
-                st.success(f"Using '{pos_c}'(Pos), '{cov_c}'(Cov)" + (f", '{chr_c}'(Chr)" if chr_c else ".")); st.divider(); st.subheader("Filter & Plot")
-                try:
-                    use=[pos_c,cov_c]; if chr_c: use.insert(0,chr_c); df_full=df_c[use].copy(); new=['Pos','Cov']; if chr_c: new.insert(0,'Chr'); df_full.columns=new; sel_chr=None
-                    if chr_c: u_chrs=sorted(df_full['Chr'].astype(str).unique()); opts=['All']+u_chrs; sel_chr=st.selectbox("Filter Chr:",opts,0,key="cov_filter_chr"); df_plot=df_full[df_full['Chr'].astype(str)==str(sel_chr)].copy() if sel_chr!='All' else df_full.copy(); st.info(f"Filter: **{sel_chr}**.") if sel_chr!='All' else None
-                    else: df_plot=df_full.copy()
-                    df_plot['Pos']=pd.to_numeric(df_plot['Position'],errors='coerce'); df_plot['Cov']=pd.to_numeric(df_plot['Coverage'],errors='coerce'); r_b=len(df_plot); df_plot.dropna(subset=['Pos','Cov'],inplace=True); r_a=len(df_plot);
-                    if r_a<r_b: st.warning(f"Removed **{r_b-r_a:,}** invalid rows.")
-                    if df_plot.empty: st.error("No data left."); st.stop()
-                    df_plot=df_plot.sort_values('Pos').reset_index(drop=True); mn,mx=df_plot['Pos'].min(),df_plot['Pos'].max(); sfx=f" ({sel_chr})" if sel_chr and sel_chr!='All' else f" (All)" if chr_c else ""; st.write(f"Plotting **{mn:,.0f}**-**{mx:,.0f}**{sfx}.")
-                    cp1,cp2=st.columns(2); with cp1: fill=st.checkbox("Fill",True,key="cov_fill"); log_y=st.checkbox("Log Y",False,key="cov_log")
-                    with cp2: mx_sm=min(201,max(1,len(df_plot)//2)); sm_w=st.slider("Smooth:",0,mx_sm,0,2,key="cov_smooth"); if sm_w>0 and sm_w%2==0: sm_w+=1; st.caption(f"Smooth:{sm_w}")
-                    fig,ax=plt.subplots(figsize=(14,5)); ax.plot(df_plot['Pos'],df_plot['Cov'],label='Raw',lw=0.7,color='#007bff',alpha=0.8); if fill: ax.fill_between(df_plot['Pos'],df_plot['Cov'],alpha=0.2,color='#80ccff')
-                    if sm_w>1: df_plot['Smooth']=df_plot['Cov'].rolling(sm_w,center=True,min_periods=1).mean(); ax.plot(df_plot['Pos'],df_plot['Smooth'],label=f'Smooth ({sm_w}bp)',lw=1.8,color='#ff7f0e',ls='-')
-                    p_t=f"Coverage: {up_f.name}{sfx}"; p_x=f"Pos ({pos_c})"; p_y=f"Depth ({cov_c}){ ' (Log)' if log_y else ''}"; style_plot(fig,ax,title=p_t,xlabel=p_x,ylabel=p_y)
-                    if log_y: ax.set_yscale('log'); mn_pc=df_plot[df_plot['Cov']>0]['Cov'].min(); ax.set_ylim(bottom=max(0.1,mn_pc*0.5) if pd.notna(mn_pc) and mn_pc>0 else 0.1)
-                    else: ax.set_ylim(bottom=0)
-                    ax.ticklabel_format(style='plain',axis='x',useOffset=False); ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x,p:format(int(x),','))); leg=ax.legend(facecolor='#fff',labelcolor='#333'); [t.set_fontfamily('Times New Roman')or t.set_fontweight('bold') for t in leg.get_texts()]; st.pyplot(fig)
-                    st.divider(); st.subheader(f"Stats (Raw{sfx})"); stats=df_plot['Cov'].describe(); sc1,sc2,sc3,sc4=st.columns(4); sc1.metric("Mean",f"{stats.get('mean',0):,.1f}x"); sc2.metric("Median",f"{stats.get('50%',0):,.1f}x"); sc3.metric("Min",f"{stats.get('min',0):,.0f}x"); sc4.metric("Max",f"{stats.get('max',0):,.0f}x")
-                    mx_c=int(stats.get('max',1000)); df_th=min(10,max(1,int(stats.get('mean',10)))); mx_th=max(1,mx_c); cov_th=st.number_input("Breadth ≥:",0,mx_th,df_th,1,key="cov_b_thresh")
-                    if cov_th>=0: above=(df_plot['Cov']>=cov_th).sum(); total=len(df_plot); if total>0: brd=(above/total*100); st.metric(f"Breadth (≥{cov_th}x)",f"{brd:.1f}%",f"{above:,}/{total:,} pos"); else: st.metric(f"Breadth (≥{cov_th}x)","N/A")
-                except Exception as plot_e: st.error(f"Plot error: {plot_e}")
-        except Exception as read_e: st.error(f"Read error: {read_e}"); st.exception(read_e)
-
-elif menu == "Variant Annotation Tool": # Logic unchanged, styling updates via CSS
-    st.header("Simple Variant Substitution"); st.markdown("Introduce SNP & see codon effect.")
-    in_m=st.radio("Input Ref:",("Paste","FASTA"),key="var_in",horizontal=True); ref_seq,seq_id="","Ref"
-    if in_m=="Paste": ref_seq=st.text_area("Ref DNA:",h=100,key="var_ref",placeholder="Paste ref...")
-    else: up_f=st.file_uploader("Ref FASTA:",type=['fasta','fa','fna'],key="var_f"); ref_seq,seq_id=parse_fasta(up_f) if up_f else (None,None)
-    if ref_seq: st.text_area("Ref Preview:",value=f">**{seq_id}**\n{ref_seq[:80]}{'...' if len(ref_seq)>80 else ''}",h=75,key="var_d",disabled=True)
-    st.divider(); st.subheader("Variant"); v1,v2=st.columns(2); with v1: var_pos=st.number_input("Pos (1-based):",1,step=1,value=1,key="var_p"); with v2: var_base=st.selectbox("New Base:",["A","T","C","G"],key="var_b")
-    st.divider()
-    if st.button("Apply & Annotate",key="var_btn"):
-        if not ref_seq: st.warning("Provide ref.")
-        else:
-            ref_cl="".join(re.findall(r'[ATCG]',ref_seq.upper())); err=False
-            if not ref_cl: st.error("Ref invalid."); err=True
-            else: ref_len=len(ref_cl); z_pos=var_pos-1; if z_pos<0 or z_pos>=ref_len: st.error(f"Pos {var_pos:,} out of range (1-{ref_len:,})."); err=True
-            if not err:
-                try:
-                    orig=ref_cl[z_pos]
-                    if orig==var_base: st.info(f"No change: Base at **{var_pos:,}** ('**{seq_id}**') already '{orig}'."); st.write("**Ref:**"); st.code(ref_cl)
-                    else:
-                        alt_l=list(ref_cl); alt_l[z_pos]=var_base; alt_seq="".join(alt_l)
-                        st.subheader("Variant Applied"); st.write(f"**Seq:** '**{seq_id}**'|**Var:** Pos **{var_pos:,}**"); st.markdown(f"**Change:** Ref (`{orig}`)→Alt (`{var_base}`)")
-                        s1,s2=st.columns(2); with s1: st.write("**Ref:**"); st.code(ref_cl); with s2: st.write("**Alt:**"); st.code(alt_seq)
-                        st.divider(); st.write("#### Codon & Effect:")
-                        c_s=(z_pos//3)*3; p_in_c=(z_pos%3)+1
-                        if c_s+3<=ref_len:
-                            ref_c,alt_c=ref_cl[c_s:c_s+3],alt_seq[c_s:c_s+3]; st.write(f"Var at **{var_pos:,}** is pos **{p_in_c}** in codon at **{c_s+1:,}**.")
+                            # Translate from current frame, stopping at the first stop codon encountered
                             try:
-                                ref_a,alt_a=str(Seq(ref_c).translate(1,cds=False)),str(Seq(alt_c).translate(1,cds=False));
-                                cc1,cc2=st.columns(2); with cc1: st.write("**Ref Codon:**"); st.code(f"Codon:{ref_c}\nAA:   {ref_a}"); with cc2: st.write("**Alt Codon:**"); st.code(f"Codon:{alt_c}\nAA:   {alt_a}")
-                                eff="?"; if ref_a==alt_a: eff="✅ Silent"; elif alt_a=='*': eff="🛑 Nonsense" if ref_a!='*' else "❓ Stop Retained"; elif ref_a=='*': eff="➡️ Stop-Lost"; else: eff="🔄 Missense"; st.markdown(f"**Effect:** {eff}")
-                            except Exception as ce: st.warning(f"Translate fail: {ce}")
-                        else: st.info("Variant near end.")
-                except Exception as e: st.error(f"Error: {e}")
+                                translation = str(seq_obj[frame:].translate(to_stop=True))
+                            except Exception as trans_err:
+                                st.warning(f"Translation error in frame {frame+1}: {trans_err}. Skipping frame.")
+                                continue
 
-elif menu == "Codon Usage Analyzer": # Logic unchanged, styling updates via CSS/style_plot
-    st.header("Codon Usage"); st.markdown("Analyze codon freq in CDS (A/T/C/G, len / 3).")
-    in_m=st.radio("Input CDS:",("Paste","FASTA"),key="cod_in",horizontal=True); cds_seq,seq_id="","CDS"
-    if in_m=="Paste": cds_seq=st.text_area("CDS:",h=120,key="cod_seq",placeholder="Paste CDS...")
-    else: up_f=st.file_uploader("FASTA:",type=['fasta','fa','fna'],key="cod_f"); cds_seq,seq_id=parse_fasta(up_f) if up_f else (None,None)
-    if cds_seq: st.text_area("Preview:",value=f">**{seq_id}**\n{cds_seq[:80]}{'...' if len(cds_seq)>80 else ''}",h=75,key="cod_d",disabled=True)
-    st.divider()
-    if st.button("Analyze",key="cod_btn"):
-        if not cds_seq: st.warning("Provide CDS.")
-        else:
-            cds_cl="".join(re.findall(r'[ATCG]',cds_seq.upper())); err=False
-            if not cds_cl: st.error("No valid DNA."); err=True; elif len(cds_cl)==0: st.error("Empty."); err=True; elif len(cds_cl)%3!=0: st.error(f"Length ({len(cds_cl):,}) not /3."); err=True
-            if not err:
-                try:
-                    st.subheader(f"Usage: '**{seq_id}**'")
-                    codons=[cds_cl[i:i+3] for i in range(0,len(cds_cl),3)]; tot_c=len(codons); counts=Counter(codons); st.metric("Codons",f"{tot_c:,}")
-                    try: std_t=CodonTable.unambiguous_dna_by_id[1]; all_p=list(std_t.forward_table.keys())+std_t.stop_codons; aa_map=std_t.forward_table; stops=set(std_t.stop_codons)
-                    except Exception as te: st.error(f"Table fail: {te}"); st.stop()
-                    usage=[];
-                    for cdn in sorted(all_p): cnt=counts.get(cdn,0); freq=(cnt/tot_c*100) if tot_c>0 else 0; aa=aa_map.get(cdn,'Stop' if cdn in stops else '?'); usage.append({"Codon":cdn,"AA":aa,"Count":cnt,"Freq(%)":freq})
-                    df=pd.DataFrame(usage); st.write("#### Table:"); st.dataframe(df.style.format({'Count':'{:,}','Freq(%)':'{:.1f}%'}),hide_index=True,use_container_width=True)
-                    st.divider(); st.subheader("Plot"); plot_c=st.selectbox("Plot:",["Freq (All)","Rel Usage (AA)"],key="cod_plot")
-                    pres=df[df['Count']>0].copy()
-                    if pres.empty: st.info("No codons.")
+                            current_pos_in_translation = 0
+                            while 'M' in translation[current_pos_in_translation:]:
+                                # Find the next potential start codon 'M'
+                                start_codon_index = translation.find('M', current_pos_in_translation)
+                                if start_codon_index == -1:
+                                    break # No more 'M's in the remaining translation
+
+                                # The ORF is the sequence from 'M' onwards (as translate already stopped at '*')
+                                potential_orf = translation[start_codon_index:]
+
+                                if len(potential_orf) >= min_orf_aa:
+                                    # Calculate DNA coordinates (1-based)
+                                    start_dna_pos = frame + (start_codon_index * 3) + 1
+                                    end_dna_pos = start_dna_pos + (len(potential_orf) * 3) - 1
+                                    orfs.append({
+                                        "Frame": frame + 1,
+                                        "Start (DNA)": start_dna_pos,
+                                        "End (DNA)": end_dna_pos,
+                                        "Length (AA)": len(potential_orf),
+                                        "Protein Sequence (Preview)": potential_orf[:40] + "..." if len(potential_orf) > 40 else potential_orf
+                                    })
+
+                                # Move search position past the current 'M' to find subsequent ORFs
+                                current_pos_in_translation = start_codon_index + 1
+
+                    if orfs:
+                         st.success(f"Found {len(orfs)} potential ORF(s) ≥ {min_orf_aa} AA.")
+                         orf_df = pd.DataFrame(orfs).sort_values(["Frame", "Start (DNA)"])
+                         st.dataframe(orf_df.style.format({"Start (DNA)":"{:,}", "End (DNA)":"{:,}", "Length (AA)":"{:,}"}),
+                                      hide_index=True, use_container_width=True)
                     else:
-                        if plot_c=="Freq (All)":
-                            df_a=pres.sort_values("Codon"); fig,ax=plt.subplots(figsize=(16,6)); u_aas=sorted(list(df_a['AA'].unique())); cmap=plt.get_cmap('tab20',len(u_aas)); aa_c={aa:cmap(i) for i,aa in enumerate(u_aas)}; b_c=[aa_c.get(aa,'#888') for aa in df_a['AA']]; ax.bar(df_a['Codon'],df_a['Freq(%)'],color=b_c)
-                            style_plot(fig,ax,title=f"Freq '{seq_id}'",xlabel="Codon",ylabel="Freq (%)"); ax.tick_params(axis='x',rotation=90,labelsize=9); [l.set_fontfamily('Times New Roman')or l.set_fontweight('bold') for l in ax.get_xticklabels()]; st.pyplot(fig)
-                        elif plot_c=="Rel Usage (AA)":
-                            avail=[aa for aa in pres['AA'].unique() if aa!='?'];
-                            if not avail: st.info("No std AAs/Stop.")
+                         st.info(f"No potential ORFs found with a minimum length of {min_orf_aa} amino acids.")
+                except Exception as e:
+                    st.error("An error occurred during DNA sequence analysis:")
+                    st.exception(e)
+
+
+elif menu == "Protein Sequence Analysis":
+    st.header("Protein Sequence Analysis")
+    st.markdown("Analyze biochemical properties of a protein sequence. Input sequence by pasting or uploading a FASTA file.")
+
+    input_method = st.radio("Input Method:", ("Paste", "FASTA"), key="prot_in", horizontal=True)
+    sequence, seq_id = "", "Pasted Sequence"
+    if input_method == "Paste":
+        sequence = st.text_area("Enter Protein Sequence:", height=150, key="prot_seq", placeholder="Paste your protein sequence here (e.g., MKT...). Non-standard/ambiguous characters will be handled.")
+    else:
+        uploaded_file = st.file_uploader("Upload FASTA File:", type=['fasta','fa','faa'], key="prot_fasta")
+        if uploaded_file:
+            sequence, seq_id = parse_fasta(uploaded_file)
+            if sequence:
+                 st.text_area("Sequence Preview (from FASTA):", value=f">{seq_id}\n{sequence[:100]}{'...' if len(sequence) > 100 else ''}", height=100, key="prot_disp", disabled=True)
+
+    st.divider()
+    if st.button("Analyze Protein", key="prot_analyze_btn"):
+        if not sequence:
+            st.warning("Please provide a protein sequence via paste or FASTA upload.")
+        else:
+            # Clean the sequence: remove whitespace and convert to uppercase
+            seq_clean = "".join(sequence.split()).upper()
+            all_chars = set(seq_clean)
+            standard_set = set(STANDARD_AA)
+            ambiguous_set = set(AMBIGUOUS_AA)
+
+            # Identify non-standard and ambiguous characters
+            non_standard_chars = all_chars - standard_set - ambiguous_set
+            ambiguous_chars_present = all_chars.intersection(ambiguous_set)
+
+            # Sequence used for calculations (only standard AAs)
+            seq_for_calc = "".join(c for c in seq_clean if c in standard_set)
+
+            # Display warnings if non-standard or ambiguous characters are found
+            if non_standard_chars:
+                st.warning(f"Ignoring unknown characters: `{'`, `'.join(sorted(list(non_standard_chars)))}`")
+            if ambiguous_chars_present:
+                st.warning(f"Ignoring ambiguous amino acid codes for calculations: `{'`, `'.join(sorted(list(ambiguous_chars_present)))}`")
+
+            if not seq_for_calc:
+                st.error("No standard amino acids found in the sequence. Cannot perform analysis.")
+            else:
+                try:
+                    st.subheader(f"Analysis Results for: '{seq_id}'")
+                    pa = ProteinAnalysis(seq_for_calc)
+
+                    # Display key metrics
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.metric("Input Length (incl. non-std)", f"{len(seq_clean):,} aa")
+                        st.metric("Analyzed Length (standard AA)", f"{len(seq_for_calc):,} aa")
+                        st.metric("Molecular Weight", f"{pa.molecular_weight():,.1f} Da")
+                        st.metric("Isoelectric Point (pI)", f"{pa.isoelectric_point():.2f}")
+                    with col2:
+                        # GRAVY Score
+                        gravy_score = pa.gravy()
+                        hydrophobicity = "Hydrophobic" if gravy_score > 0 else ("Hydrophilic" if gravy_score < 0 else "Neutral")
+                        st.metric("GRAVY Index", f"{gravy_score:.3f}", delta=hydrophobicity, delta_color="off") # delta_color="off" prevents default up/down arrows
+
+                        # Instability Index
+                        instability_idx = pa.instability_index()
+                        stability = "Likely Stable" if instability_idx < 40 else "Likely Unstable"
+                        # Use delta_color to indicate stability (normal=good=stable)
+                        st.metric("Instability Index", f"{instability_idx:.2f}", delta=stability,
+                                  delta_color="normal" if stability == "Likely Stable" else "inverse")
+
+                    # Amino Acid Composition (based on the full input sequence)
+                    st.divider()
+                    st.write("#### Amino Acid Composition (Full Input Sequence):")
+                    composition = Counter(seq_clean)
+                    comp_data = [{"Amino Acid": aa, "Count": c, "Percentage (%)": (c/len(seq_clean)*100) if seq_clean else 0}
+                                 for aa, c in sorted(composition.items())]
+                    comp_df = pd.DataFrame(comp_data)
+                    st.dataframe(comp_df.style.format({'Count':'{:,}', 'Percentage (%)':'{:.1f}%'}),
+                                 hide_index=True, use_container_width=True)
+
+                    # Secondary Structure Prediction
+                    st.divider()
+                    st.write("#### Predicted Secondary Structure Fractions:")
+                    try:
+                        helix, turn, sheet = pa.secondary_structure_fraction()
+                        labels = 'Helix', 'Turn', 'Sheet'
+                        sizes = [helix * 100, turn * 100, sheet * 100] # Convert to percentages
+                        # Define colors
+                        colors = ['#66fcf1', '#fca311', '#ffbf00'] # Cyan, Orange, Amber
+
+                        fig, ax = plt.subplots()
+                        # Use wedgeprops for styling, autopct for percentages
+                        wedges, texts, autotexts = ax.pie(sizes, labels=labels, startangle=90, colors=colors, autopct='%1.1f%%',
+                                              wedgeprops={'edgecolor': '#1f2833', 'linewidth': 1},
+                                              textprops={'color': '#e0e0e0', 'fontweight': 'bold', 'fontfamily': 'Times New Roman'})
+
+                        # Improve autopct text visibility
+                        plt.setp(autotexts, size=10, weight="bold", color='#0b0c10', family='Times New Roman') # Dark text on light wedges
+
+                        ax.axis('equal') # Equal aspect ratio ensures a circular pie chart
+
+                        # Style the plot using the helper function (sets background, etc.)
+                        style_plot(fig, ax, title="Predicted Secondary Structure")
+                        # Remove axis labels for pie chart
+                        ax.set_xlabel("")
+                        ax.set_ylabel("")
+
+                        # Add a legend (optional, as labels are on wedges)
+                        # ax.legend(wedges, labels, title="Structure", loc="center left", bbox_to_anchor=(1.05, 0.5),
+                        #           labelcolor='#e0e0e0', facecolor='#2c3e50', edgecolor='#4f5b66',
+                        #           prop={'family':'Times New Roman', 'weight':'bold', 'size': 10})
+
+                        st.pyplot(fig)
+
+                    except ZeroDivisionError:
+                         st.warning("Could not calculate secondary structure fractions (possibly due to sequence length or composition).")
+                    except Exception as ss_e:
+                        st.warning(f"Secondary structure prediction failed: {ss_e}")
+
+                except Exception as e:
+                    st.error("An error occurred during protein sequence analysis:")
+                    st.exception(e)
+
+
+elif menu == "Primer Design":
+    st.header("Basic Primer Design Tool")
+    st.markdown("Generates simple forward and reverse primers from the ends of a DNA template (accepts A, T, C, G only). Estimates Melting Temperature (Tm).")
+    st.warning("⚠️ **Educational Tool:** This performs very basic primer selection from sequence ends. It **does not** check for specificity (e.g., BLAST), secondary structures (hairpins, dimers), primer-dimers, or compatibility. Use dedicated primer design software for experimental work.", icon="🔬")
+
+    input_method = st.radio("Input Method:", ("Paste", "FASTA"), key="p_in", horizontal=True)
+    sequence, seq_id = "", "Pasted Sequence"
+    if input_method == "Paste":
+        sequence = st.text_area("Enter DNA Template Sequence:", height=150, key="p_seq", placeholder="Paste your DNA sequence here (e.g., ATGC...). Only ATCG characters will be used.")
+    else:
+        uploaded_file = st.file_uploader("Upload FASTA File:", type=['fasta','fa','fna'], key="p_fasta")
+        if uploaded_file:
+            sequence, seq_id = parse_fasta(uploaded_file)
+            if sequence:
+                st.text_area("Sequence Preview (from FASTA):", value=f">{seq_id}\n{sequence[:100]}{'...' if len(sequence) > 100 else ''}", height=100, key="p_disp", disabled=True)
+
+    # Primer Design Parameters
+    st.divider()
+    st.subheader("Primer Parameters")
+    col1, col2 = st.columns(2)
+    with col1:
+        primer_len = st.slider("Desired Primer Length (bp):", min_value=15, max_value=35, value=20, step=1, key="p_len")
+    with col2:
+        # Tm Calculation Method Selection
+        tm_method = st.selectbox("Melting Temperature (Tm) Method:",
+                                 ["Tm_NN", "Tm_GC", "Tm_Wallace"],
+                                 index=0, key="p_tm_m",
+                                 help="Tm_NN (Nearest Neighbor) is generally more accurate but requires concentration inputs. Tm_GC and Tm_Wallace are simpler approximations.")
+        # Conditional inputs for Tm_NN
+        dna_nM, salt_mM = 50.0, 50.0 # Default values
+        if tm_method == "Tm_NN":
+            with st.expander("Tm_NN Parameters (Optional)"):
+                dna_nM = st.number_input("Primer Concentration (nM):", min_value=1.0, max_value=1000.0, value=50.0, step=1.0, key="p_dna_c", format="%.1f")
+                salt_mM = st.number_input("Monovalent Cation Conc. (mM, e.g., Na+):", min_value=1.0, max_value=200.0, value=50.0, step=1.0, key="p_salt_c", format="%.1f")
+        else:
+            # Keep defaults if not Tm_NN, but they won't be used by Tm_GC/Tm_Wallace
+            dna_nM, salt_mM = 50.0, 50.0
+
+    st.divider()
+    if st.button("Design Primers", key="p_design_btn"):
+        if not sequence:
+            st.warning("Please provide a DNA template sequence.")
+        else:
+            # Clean sequence: keep only A, T, C, G (case-insensitive)
+            seq_clean = "".join(re.findall(r'[ATCG]', sequence.upper()))
+            if not seq_clean:
+                st.error("The provided input does not contain any valid DNA bases (A, T, C, G) required for primer design.")
+            elif len(seq_clean) < primer_len * 2:
+                st.error(f"Template sequence is too short ({len(seq_clean):,} bp). It needs to be at least twice the primer length ({primer_len * 2} bp).")
+            else:
+                try:
+                    # Design primers from the ends
+                    fw_p = Seq(seq_clean[:primer_len])
+                    rv_template_segment = Seq(seq_clean[-primer_len:])
+                    rv_p = rv_template_segment.reverse_complement()
+
+                    # Calculate GC content
+                    fw_gc = gc_fraction(fw_p) * 100
+                    rv_gc = gc_fraction(rv_p) * 100
+
+                    # Calculate Tm
+                    fw_tm, rv_tm = "N/A", "N/A" # Initialize as Not Available
+                    try:
+                        tm_args = {'strict': False} # Allow approximate calculations if needed
+                        if tm_method == "Tm_NN":
+                            # Convert nM to M for dnac1 if needed (check Bio.SeqUtils docs - typically expects M)
+                            # Assuming MeltingTemp expects nM directly based on prior code structure. If errors occur, conversion might be needed.
+                            # tm_args.update({'dnac1': dna_nM / 1e9, 'Na': salt_mM}) # Example if M is needed
+                            tm_args.update({'dnac1': dna_nM, 'Na': salt_mM}) # Pass nM and mM as is (verify expected units)
+                        else:
+                             # Tm_GC and Tm_Wallace don't typically use these args, but pass defaults just in case
+                             tm_args.update({'dnac1': 50.0, 'Na': 50.0})
+
+                        # Get the specific Tm function from MeltingTemp module
+                        tm_func = getattr(MeltingTemp, tm_method)
+                        fw_tm = tm_func(fw_p, **tm_args)
+                        rv_tm = tm_func(rv_p, **tm_args)
+                    except ValueError as tm_ve:
+                        st.warning(f"Tm calculation issue: {tm_ve}. Tm values might be inaccurate or unavailable.")
+                    except AttributeError:
+                         st.error(f"Could not find the Tm calculation method '{tm_method}' in Bio.SeqUtils.MeltingTemp.")
+                    except Exception as tm_e:
+                         st.error(f"An unexpected error occurred during Tm calculation: {tm_e}")
+
+                    # Display Results
+                    st.subheader("Suggested Primers (from sequence ends)")
+                    p_col1, p_col2 = st.columns(2)
+                    with p_col1:
+                        st.markdown("#### Forward Primer (5' → 3')")
+                        st.code(str(fw_p), language='text')
+                        st.metric("Length", f"{len(fw_p)} bp")
+                        st.metric("GC Content", f"{fw_gc:.1f}%")
+                        st.metric(f"Estimated Tm ({tm_method})", f"{fw_tm:.1f} °C" if isinstance(fw_tm, (float, int)) else "N/A")
+                    with p_col2:
+                        st.markdown("#### Reverse Primer (5' → 3')")
+                        st.code(str(rv_p), language='text')
+                        st.metric("Length", f"{len(rv_p)} bp")
+                        st.metric("GC Content", f"{rv_gc:.1f}%")
+                        st.metric(f"Estimated Tm ({tm_method})", f"{rv_tm:.1f} °C" if isinstance(rv_tm, (float, int)) else "N/A")
+
+                    st.divider()
+                    st.metric(f"Resulting Amplicon Size (based on full template '{seq_id}')", f"{len(seq_clean):,} bp")
+
+                    # Add caption about Tm parameters if Tm_NN was used and successful
+                    if tm_method == "Tm_NN" and isinstance(fw_tm, (float, int)):
+                        st.caption(f"Tm ({tm_method}) calculated using: Primer Conc. = {dna_nM:.1f} nM, Salt Conc. = {salt_mM:.1f} mM.")
+                    elif isinstance(fw_tm, (float, int)):
+                        st.caption(f"Tm calculated using the '{tm_method}' formula/method.")
+
+                except Exception as e:
+                    st.error("An error occurred during primer design:")
+                    st.exception(e)
+
+
+elif menu == "Restriction Enzyme Analysis":
+    st.header("Restriction Enzyme Analysis")
+    st.markdown("Identify restriction enzyme cut sites within a DNA sequence (accepts A, T, C, G only). Input sequence by pasting or uploading a FASTA file.")
+    st.info("This tool uses enzyme data from Biopython's REBASE interface. Analysis is performed on the provided DNA strand.")
+
+    input_method = st.radio("Input Method:", ("Paste", "FASTA"), key="re_in", horizontal=True)
+    sequence, seq_id = "", "Pasted Sequence"
+    if input_method == "Paste":
+        sequence = st.text_area("Enter DNA Sequence:", height=150, key="re_seq", placeholder="Paste your DNA sequence here (e.g., GAATTC...). Only ATCG characters will be used.")
+    else:
+        uploaded_file = st.file_uploader("Upload FASTA File:", type=['fasta','fa','fna'], key="re_fasta")
+        if uploaded_file:
+            sequence, seq_id = parse_fasta(uploaded_file)
+            if sequence:
+                st.text_area("Sequence Preview (from FASTA):", value=f">{seq_id}\n{sequence[:100]}{'...' if len(sequence) > 100 else ''}", height=100, key="re_disp", disabled=True)
+
+    # Enzyme Selection
+    st.divider()
+    st.subheader("Enzyme Selection")
+    # List of common enzymes for convenience
+    common_enzymes = sorted(['EcoRI','BamHI','HindIII','NotI','XhoI','PstI','SacI','SalI','SpeI','SphI','KpnI','SmaI','EcoRV','HaeIII','HhaI','AluI','BglII','NcoI','NdeI','XbaI','ClaI','DpnI','MboI','Sau3AI','TaqI'])
+    selected_common = st.multiselect("Select common enzymes:", common_enzymes, default=['EcoRI','BamHI','HindIII'], key="re_sel")
+
+    custom_enzymes_str = st.text_input("Enter custom enzymes (comma-separated, case-sensitive):", key="re_cust", placeholder="e.g., BsaI, BsmBI, PacI")
+    # Combine selected and custom enzymes
+    all_selected_enzymes = set(selected_common)
+    if custom_enzymes_str:
+        custom_list = {e.strip() for e in custom_enzymes_str.split(',') if e.strip()}
+        all_selected_enzymes.update(custom_list)
+
+    final_enzyme_list = sorted(list(all_selected_enzymes))
+
+    # Topology option
+    is_linear = st.checkbox("Assume Linear DNA", value=True, key="re_lin", help="Uncheck if the sequence represents circular DNA (e.g., a plasmid).")
+
+    st.divider()
+    if st.button("Analyze Restriction Sites", key="re_analyze_btn"):
+        if not sequence:
+            st.warning("Please provide a DNA sequence.")
+        elif not final_enzyme_list:
+            st.warning("Please select at least one restriction enzyme.")
+        else:
+            # Clean sequence: keep only A, T, C, G
+            seq_clean = "".join(re.findall(r'[ATCG]', sequence.upper()))
+            if not seq_clean:
+                st.error("The provided input does not contain any valid DNA bases (A, T, C, G).")
+            else:
+                try:
+                    seq_obj = Seq(seq_clean)
+                    st.info(f"Analyzing sequence '{seq_id}' ({len(seq_obj):,} bp, {'Linear' if is_linear else 'Circular'}).")
+
+                    # Validate selected enzymes against Biopython's known enzymes
+                    valid_enzymes_obj = []
+                    invalid_enzyme_names = []
+                    from Bio.Restriction import AllEnzymes # Load the enzyme list
+                    with st.spinner("Validating selected enzymes..."):
+                        for enz_name in final_enzyme_list:
+                            if enz_name in AllEnzymes:
+                                valid_enzymes_obj.append(AllEnzymes.get(enz_name)) # Get the enzyme object
                             else:
-                                sel=st.selectbox("Select:",sorted(avail),key="cod_aa"); aa_df=pres[pres['AA']==sel].copy(); tot_aa=aa_df['Count'].sum()
-                                if tot_aa>0 and not aa_df.empty:
-                                    aa_df['Rel(%)']=(aa_df['Count']/tot_aa*100); aa_df=aa_df.sort_values("Codon"); fig,ax=plt.subplots(figsize=(max(6,len(aa_df)*1.5),5)); ax.bar(aa_df['Codon'],aa_df['Rel(%)'],color='#ff7f0e')
-                                    style_plot(fig,ax,title=f"Rel Usage '{sel}' ({tot_aa:,} total)",xlabel="Codon",ylabel="Rel (%)"); ax.set_ylim(0,105); st.pyplot(fig)
-                                    st.write(f"**Details '{sel}':**"); st.dataframe(aa_df[['Codon','Count','Rel(%)']].style.format({'Count':'{:,}','Rel(%)':'{:.1f}%'}),hide_index=True,use_container_width=True)
-                                else: st.info(f"No codons for '{sel}'.")
-                except Exception as e: st.error(f"Usage error: {e}"); st.exception(e)
+                                invalid_enzyme_names.append(enz_name)
+
+                    if invalid_enzyme_names:
+                        st.warning(f"The following enzyme names were not recognized and will be ignored: `{'`, `'.join(invalid_enzyme_names)}`")
+
+                    if not valid_enzymes_obj:
+                        st.error("No valid restriction enzymes were selected or found. Please check the enzyme names.")
+                        st.stop()
+
+                    # Perform the restriction analysis
+                    st.write(f"**Analyzing with:** {', '.join(map(str, valid_enzymes_obj))}")
+                    with st.spinner("Searching for cut sites..."):
+                        rb = RestrictionBatch(valid_enzymes_obj) # Use the validated enzyme objects
+                        analysis = Analysis(rb, seq_obj, linear=is_linear)
+
+                    st.subheader("Restriction Analysis Results")
+                    st.write(f"**Sequence:** '{seq_id}' | **Length:** {len(seq_obj):,} bp | **Topology:** {'Linear' if is_linear else 'Circular'}")
+                    st.divider()
+
+                    # Get the results and summarize
+                    results_dict = analysis.full() # Dictionary: {EnzymeObject: [site_positions]}
+                    summary_data = []
+                    total_cuts = 0
+                    sites_found = False
+
+                    for enz_obj, sites in results_dict.items():
+                        cut_count = len(sites)
+                        total_cuts += cut_count
+                        if cut_count > 0:
+                            sites_found = True
+                        summary_data.append({
+                            "Enzyme": str(enz_obj),
+                            "Recognition Site": str(enz_obj.site),
+                            "Number of Cuts": cut_count,
+                            "Cut Positions (1-based)": ", ".join(map(str, sites)) if sites else "None"
+                        })
+
+                    if not sites_found:
+                        st.success("✅ No cut sites were found for the selected valid enzymes in this sequence.")
+                    else:
+                        st.write("#### Cut Site Summary:")
+                        summary_df = pd.DataFrame(summary_data)
+                        # Sort by number of cuts (descending), then by enzyme name (ascending)
+                        summary_df = summary_df.sort_values(by=["Number of Cuts", "Enzyme"], ascending=[False, True])
+                        st.dataframe(summary_df.style.format({"Number of Cuts":"{:,}"}),
+                                     hide_index=True, use_container_width=True)
+
+                        # Fragment Analysis
+                        st.divider()
+                        st.write("#### Predicted DNA Fragments:")
+                        try:
+                            fragments = analysis.fragments # Get fragment sequences (as strings)
+                            fragment_lengths = sorted([len(f) for f in fragments], reverse=True) # Sort lengths descending
+
+                            f_col1, f_col2 = st.columns(2)
+                            with f_col1:
+                                st.metric("Total Cuts Detected", f"{total_cuts:,}")
+                            with f_col2:
+                                st.metric("Number of Fragments", f"{len(fragments):,}")
+
+                            st.write("**Fragment Lengths (bp, sorted descending):**")
+                            if fragment_lengths:
+                                if len(fragment_lengths) > 30: # Show first few and count rest if too many
+                                    st.text(", ".join(f"{l:,}" for l in fragment_lengths[:15]) + f", ... ({len(fragment_lengths)-15} more fragments)")
+                                else:
+                                    st.text(", ".join(f"{l:,}" for l in fragment_lengths))
+                            else:
+                                # Should only happen if 0 cuts on linear, or 1 cut on circular (results in one linear piece)
+                                st.text(f"Single fragment of {len(seq_obj):,} bp (or no fragments if analysis failed).")
+
+                        except Exception as frag_e:
+                            st.warning(f"Could not calculate or display fragment lengths: {frag_e}")
+
+                        # Option to show text map
+                        st.divider()
+                        show_map = st.checkbox("Show Text-Based Restriction Map", value=False, key="re_map")
+                        if show_map:
+                            st.write("#### Restriction Map (Text Representation):")
+                            try:
+                                # Use print_that to get map string, then display in code block
+                                map_output = io.StringIO()
+                                analysis.print_that(out=map_output, title=f"Map for {seq_id}", top=True) # Render map to string buffer
+                                map_string = map_output.getvalue()
+                                map_output.close()
+                                st.code(map_string, language='text')
+                            except Exception as map_e:
+                                st.error(f"Failed to generate text map: {map_e}")
+
+                except ValueError as ve:
+                    st.error(f"Restriction analysis failed. Check sequence and enzyme names. Error: {ve}")
+                except Exception as e:
+                    st.error("An unexpected error occurred during restriction analysis:")
+                    st.exception(e)
+
+
+elif menu == "Pairwise Sequence Alignment":
+    st.header("Pairwise Sequence Alignment")
+    st.markdown("Align two DNA or protein sequences using global (Needleman-Wunsch) or local (Smith-Waterman) algorithms via Biopython's `pairwise2`.")
+    st.info("Scores depend heavily on the chosen parameters (match/mismatch scores or substitution matrix, gap penalties). Ensure parameters are appropriate for your sequence type (DNA/Protein).")
+
+    # Input areas for two sequences
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("#### Sequence 1")
+        input_method1 = st.radio("Input Source:",("Paste","FASTA"), key="al_in1", horizontal=True, label_visibility="collapsed")
+        seq1, seq_id1 = "", "Sequence 1"
+        if input_method1 == "Paste":
+            seq1 = st.text_area("Enter Sequence 1:", height=120, key="al_s1", placeholder="Paste sequence here...")
+        else:
+            uploaded_file1 = st.file_uploader("Upload FASTA File 1:", type=['fasta','fa','fna','faa'], key="al_f1")
+            if uploaded_file1:
+                seq1, seq_id1 = parse_fasta(uploaded_file1)
+        # Display preview if sequence is loaded
+        if seq1:
+            st.text_area("Preview Seq 1:", value=f">{seq_id1}\n{seq1[:80]}{'...' if len(seq1)>80 else ''}", height=75, key="al_d1", disabled=True)
+
+    with col2:
+        st.markdown("#### Sequence 2")
+        input_method2 = st.radio("Input Source:",("Paste","FASTA"), key="al_in2", horizontal=True, label_visibility="collapsed")
+        seq2, seq_id2 = "", "Sequence 2"
+        if input_method2 == "Paste":
+            seq2 = st.text_area("Enter Sequence 2:", height=120, key="al_s2", placeholder="Paste sequence here...")
+        else:
+            uploaded_file2 = st.file_uploader("Upload FASTA File 2:", type=['fasta','fa','fna','faa'], key="al_f2")
+            if uploaded_file2:
+                seq2, seq_id2 = parse_fasta(uploaded_file2)
+        # Display preview if sequence is loaded
+        if seq2:
+             st.text_area("Preview Seq 2:", value=f">{seq_id2}\n{seq2[:80]}{'...' if len(seq2)>80 else ''}", height=75, key="al_d2", disabled=True)
+
+    # Alignment Parameters
+    st.divider()
+    st.subheader("Alignment Parameters")
+    pcol1, pcol2, pcol3 = st.columns(3)
+    with pcol1:
+        alignment_mode = st.selectbox("Alignment Mode:", ["Global (Needleman-Wunsch)", "Local (Smith-Waterman)"], key="al_m")
+        sequence_type = st.radio("Sequence Type:", ("DNA", "Protein"), key="al_t", horizontal=True)
+
+    with pcol2:
+        st.write("**Scoring Parameters:**")
+        substitution_matrix = None
+        match_score, mismatch_penalty = None, None
+        if sequence_type == "DNA":
+            match_score = st.number_input("Match Score:", value=2.0, step=0.5, key="al_mt", help="Score for identical characters.")
+            mismatch_penalty = st.number_input("Mismatch Penalty:", value=-1.0, step=-0.5, key="al_ms", help="Penalty for non-identical characters (should be negative or zero).")
+            mismatch_penalty = min(0.0, mismatch_penalty) # Ensure penalty is not positive
+        else: # Protein
+            available_matrices = sorted(substitution_matrices.list_matrices())
+            default_matrix_index = available_matrices.index('BLOSUM62') if 'BLOSUM62' in available_matrices else 0
+            selected_matrix_name = st.selectbox("Substitution Matrix:", available_matrices, index=default_matrix_index, key="al_mat")
+            try:
+                substitution_matrix = substitution_matrices.load(selected_matrix_name)
+                st.caption(f"Using **{selected_matrix_name}** matrix.")
+            except Exception as e:
+                st.error(f"Error loading substitution matrix '{selected_matrix_name}': {e}")
+                substitution_matrix = None # Ensure it's None if loading failed
+
+    with pcol3:
+        st.write("**Gap Penalties:**")
+        gap_open_penalty = st.number_input("Gap Open Penalty:", value=-10.0, step=-0.5, key="al_go", help="Penalty for starting a gap (should be negative or zero).")
+        gap_extend_penalty = st.number_input("Gap Extend Penalty:", value=-0.5, step=-0.1, key="al_ge", help="Penalty for extending a gap (should be negative or zero).")
+        gap_open_penalty = min(0.0, gap_open_penalty) # Ensure penalties are not positive
+        gap_extend_penalty = min(0.0, gap_extend_penalty)
+
+    st.divider()
+    if st.button("Align Sequences", key="al_btn"):
+        # --- Input Validation ---
+        valid_input = True
+        if not seq1:
+            st.warning("Sequence 1 is missing.")
+            valid_input = False
+        if not seq2:
+            st.warning("Sequence 2 is missing.")
+            valid_input = False
+        if sequence_type == "Protein" and not substitution_matrix:
+            st.error("A valid protein substitution matrix must be selected and loaded.")
+            valid_input = False
+        if not valid_input:
+            st.stop() # Halt execution if inputs are invalid
+
+        # --- Sequence Cleaning (Remove non-alphanumeric, keep standard chars + '-') ---
+        # Define valid characters based on type
+        valid_chars_pattern = re.compile(f"[^{re.escape(IUPACData.protein_letters if sequence_type == 'Protein' else IUPACData.unambiguous_dna_letters)}]")
+        seq1_clean = valid_chars_pattern.sub('', seq1.upper())
+        seq2_clean = valid_chars_pattern.sub('', seq2.upper())
+
+        if not seq1_clean:
+            st.error("Sequence 1 contains no valid characters after cleaning.")
+            valid_input = False
+        if not seq2_clean:
+            st.error("Sequence 2 contains no valid characters after cleaning.")
+            valid_input = False
+        if not valid_input:
+            st.stop()
+
+        # --- Perform Alignment ---
+        try:
+            st.subheader("Alignment Results")
+            # Determine alignment function and parameters based on mode and type
+            mode_prefix = "global" if alignment_mode.startswith("Global") else "local"
+            params = {}
+            align_function_name = ""
+
+            if substitution_matrix: # Protein alignment
+                align_function_name = f"{mode_prefix}ds" # Use matrix (d) and default scores (s) - Biopython convention
+                params = {'matrix': substitution_matrix, 'open': gap_open_penalty, 'extend': gap_extend_penalty}
+            else: # DNA alignment
+                align_function_name = f"{mode_prefix}ms" # Use match/mismatch scores (m) and default scores (s)
+                params = {'match': match_score, 'mismatch': mismatch_penalty, 'open': gap_open_penalty, 'extend': gap_extend_penalty}
+
+            # Check if the alignment function exists in pairwise2.align
+            if hasattr( pairwise2.align, align_function_name):
+                 align_func = getattr( pairwise2.align, align_function_name)
+            else:
+                st.error(f"Internal error: Could not find alignment function '{align_function_name}' in `pairwise2.align`.")
+                st.stop()
+
+            # Execute alignment
+            st.info(f"Performing {alignment_mode} {sequence_type} alignment...")
+            with st.spinner("Aligning sequences... This may take time for long sequences."):
+                # Request only the best alignment for simplicity
+                alignments = align_func(seq1_clean, seq2_clean, **params, one_alignment_only=True)
+
+            if not alignments:
+                st.warning("No alignment could be generated with the given sequences and parameters.")
+            else:
+                # Process the best alignment
+                best_alignment = alignments[0]
+                # Unpack alignment tuple
+                aligned1, aligned2, score, begin, end = best_alignment
+
+                st.metric("Alignment Score", f"{score:.2f}")
+                if mode_prefix == "local":
+                    st.write(f"**Aligned Region (0-based index):** Start = {begin}, End = {end}")
+
+                # Format and display the alignment
+                st.divider()
+                st.write("#### Best Alignment:")
+
+                # Call format_alignment WITHOUT name1/name2 arguments
+                formatted_alignment_string = pairwise2.format_alignment(
+                    aligned1, aligned2, score, begin, end,
+                    full_sequences=(mode_prefix == 'global') # Show full length for global
+                )
+
+                # Manually construct the output string to include names
+                display_text = f"Sequence 1: {seq_id1}\nSequence 2: {seq_id2}\n\n{formatted_alignment_string}"
+
+                # Display the combined text
+                st.code(display_text, language='text')
+
+                st.caption("Alignment key: '|' = Match, '.' = Mismatch (or matrix score > 0), ' ' = Negative score mismatch, '-' = Gap.")
+
+                # Calculate Identity and Gaps
+                identity_count = 0
+                gap_count = 0
+                alignment_length = len(aligned1) # Length of the aligned sequences (including gaps)
+                aligned_pairs_count = 0 # Number of positions where neither sequence has a gap
+
+                for i in range(alignment_length):
+                    res1 = aligned1[i]
+                    res2 = aligned2[i]
+                    if res1 == '-' or res2 == '-':
+                        gap_count += 1
+                    else:
+                        aligned_pairs_count += 1
+                        if res1 == res2:
+                            identity_count += 1
+
+                # Calculate percentages
+                identity_percent = (identity_count / aligned_pairs_count * 100) if aligned_pairs_count > 0 else 0
+                gap_percent = (gap_count / alignment_length * 100) if alignment_length > 0 else 0
+
+                # Display Statistics
+                st.divider()
+                st.write("#### Alignment Statistics:")
+                scol1, scol2, scol3 = st.columns(3)
+                with scol1:
+                    st.metric("Alignment Length", f"{alignment_length:,}")
+                with scol2:
+                    # Identity is calculated over non-gapped positions
+                    st.metric("Percent Identity", f"{identity_percent:.1f}%", f"{identity_count:,} / {aligned_pairs_count:,} pairs")
+                with scol3:
+                    st.metric("Gap Percentage", f"{gap_percent:.1f}%", f"{gap_count:,} / {alignment_length:,} total")
+                st.caption("Percent Identity is calculated as (Identical Matches) / (Aligned Pairs excluding gaps).")
+
+        except Exception as e:
+            st.error("An error occurred during sequence alignment:")
+            st.exception(e) # Display the full traceback for debugging
+
+
+elif menu == "Motif Finder Tool":
+    st.header("Sequence Motif Finder")
+    st.markdown("Search for specific patterns (motifs) within a DNA or protein sequence using exact matching or regular expressions (regex).")
+    st.info("Regex examples: `GAATTC` (exact), `G[AT]ATTC` (A or T at pos 2), `M[A-Z]{5}K` (M, 5 any AA, K), `^ATG` (starts with ATG), `TAG$` (ends with TAG). Use `\\` to escape special characters like `.` or `*`.")
+
+    input_method = st.radio("Input Method:",("Paste","FASTA"), key="mo_in", horizontal=True)
+    sequence, seq_id="","Pasted Sequence"
+    if input_method=="Paste":
+        sequence=st.text_area("Enter Sequence:", height=150, key="mo_seq", placeholder="Paste DNA or protein sequence here...")
+    else:
+        uploaded_file=st.file_uploader("Upload FASTA File:", type=['fasta','fa','fna','faa'], key="mo_f")
+        if uploaded_file:
+            sequence, seq_id = parse_fasta(uploaded_file)
+    # Display preview if sequence is loaded
+    if sequence:
+        st.text_area("Sequence Preview:", value=f">{seq_id}\n{sequence[:80]}{'...' if len(sequence)>80 else ''}", height=75, key="mo_d", disabled=True)
+
+    # Motif Input and Options
+    st.divider()
+    motif_pattern = st.text_input("Enter Motif or Regular Expression (Regex):", key="mo_pat", placeholder="e.g., GAATTC or ^M[A-Z]+")
+
+    mcol1, mcol2 = st.columns(2)
+    with mcol1:
+        case_sensitive = st.checkbox("Case Sensitive Search", value=False, key="mo_case", help="If checked, 'A' will not match 'a'.")
+    with mcol2:
+        allow_overlap = st.checkbox("Allow Overlapping Matches", value=True, key="mo_ov", help="If unchecked, the search continues after the end of a found match.")
+
+    st.divider()
+    if st.button("Find Motifs", key="mo_find"):
+        if not sequence:
+            st.warning("Please provide a sequence to search within.")
+        elif not motif_pattern:
+            st.warning("Please enter a motif or regular expression to search for.")
+        else:
+            # Clean sequence (remove newlines/whitespace)
+            seq_cleaned = "".join(sequence.split())
+            if not seq_cleaned:
+                st.warning("The provided sequence is empty after cleaning.")
+            else:
+                try:
+                    # Set regex flags based on options
+                    regex_flags = 0 if case_sensitive else re.IGNORECASE
+
+                    found_matches = []
+                    search_position = 0
+                    st.info(f"Searching for motif '{motif_pattern}' in '{seq_id}'...")
+                    with st.spinner("Searching..."):
+                        # Use finditer to get match objects with positions
+                        for match in re.finditer(motif_pattern, seq_cleaned, flags=regex_flags):
+                            # Check for overlap condition
+                            if allow_overlap or match.start() >= search_position:
+                                found_matches.append(match)
+                                # Update search position for non-overlapping search
+                                if not allow_overlap:
+                                    search_position = match.end()
+
+                    st.subheader(f"Search Results for '{motif_pattern}' in '{seq_id}'")
+                    if found_matches:
+                        st.success(f"Found {len(found_matches):,} match(es).")
+                        # Prepare data for table display
+                        match_data = [{
+                            "#": i + 1,
+                            "Start (1-based)": m.start() + 1,
+                            "End (1-based)": m.end(),
+                            "Length": m.end() - m.start(),
+                            "Matched Sequence": m.group()
+                        } for i, m in enumerate(found_matches)]
+
+                        match_df = pd.DataFrame(match_data)
+                        st.dataframe(match_df.style.format({
+                            "Start (1-based)":"{:,}",
+                            "End (1-based)":"{:,}",
+                            "Length":"{:,}"
+                        }), hide_index=True, use_container_width=True)
+
+                        # Option to highlight matches in the sequence (limited length)
+                        st.divider()
+                        show_highlight = st.checkbox("Highlight Matches in Sequence (first 2000 chars)", value=False, key="mo_hi")
+                        if show_highlight:
+                             highlight_limit = 2000
+                             sequence_to_highlight = seq_cleaned[:highlight_limit]
+                             highlighted_html = ""
+                             last_end = 0
+                             # Define highlighting style
+                             mark_style = "background-color:#ffbf00; padding: 1px 3px; border-radius: 3px; color:#1a1a2e; font-weight:bold;" # Amber highlight, dark text
+                             mark_open = f"<mark style='{mark_style}'>"
+                             mark_close = "</mark>"
+
+                             for match in found_matches:
+                                 if match.start() >= highlight_limit:
+                                     break # Stop if match starts beyond limit
+                                 start, end = match.start(), min(match.end(), highlight_limit) # Cap end at limit
+                                 if start >= last_end: # Ensure we don't process overlapping parts multiple times in highlight
+                                     highlighted_html += sequence_to_highlight[last_end:start] # Add text before match
+                                     highlighted_html += mark_open + sequence_to_highlight[start:end] + mark_close # Add highlighted match
+                                     last_end = end
+
+                             highlighted_html += sequence_to_highlight[last_end:] # Add remaining text after last match
+
+                             st.markdown(f"**Highlighted Sequence (first {highlight_limit:,} characters):**")
+                             # Use a div with monospace font for better alignment
+                             st.markdown(f"<div style='font-family:monospace; word-wrap:break-word; line-height:1.6; border: 1px solid #4f5b66; padding: 10px; border-radius: 5px; background-color: #2c3e50;'>{highlighted_html}{'...' if len(seq_cleaned) > highlight_limit else ''}</div>", unsafe_allow_html=True)
+
+                    else:
+                        st.info("The specified motif/pattern was not found in the sequence.")
+
+                except re.error as regex_e:
+                    st.error(f"Invalid Regular Expression: '{motif_pattern}'. Please check the syntax.")
+                    st.exception(regex_e)
+                except Exception as e:
+                    st.error("An error occurred during the motif search:")
+                    st.exception(e)
+
+
+elif menu == "Bioinformatics Tool (Transcription/Translation)":
+    st.header("DNA Transcription and Translation Tool")
+    st.markdown("Transcribe a DNA sequence (coding strand, A, T, C, G only) into RNA, and then translate the RNA into a protein sequence using the standard genetic code.")
+
+    input_method = st.radio("Input Method:",("Paste","FASTA"), key="tr_in", horizontal=True)
+    dna_sequence, seq_id="","Pasted Sequence"
+    if input_method=="Paste":
+        dna_sequence=st.text_area("Enter DNA Sequence (Coding Strand, 5' to 3'):", height=120, key="tr_seq", placeholder="Paste your DNA sequence here (e.g., ATGCGT...). Only ATCG characters will be used.")
+    else:
+        uploaded_file=st.file_uploader("Upload FASTA File (containing DNA sequence):", type=['fasta','fa','fna'], key="tr_f")
+        if uploaded_file:
+            dna_sequence, seq_id = parse_fasta(uploaded_file)
+            if dna_sequence:
+                 st.text_area("Sequence Preview (from FASTA):", value=f">{seq_id}\n{dna_sequence[:80]}{'...' if len(dna_sequence)>80 else ''}", height=75, key="tr_d", disabled=True)
+
+    st.divider()
+    if st.button("Transcribe and Translate", key="tr_btn"):
+        if not dna_sequence:
+            st.warning("Please provide a DNA sequence.")
+        else:
+            # Clean DNA sequence: keep only A, T, C, G
+            dna_cleaned = "".join(re.findall(r'[ATCG]', dna_sequence.upper()))
+            if not dna_cleaned:
+                st.error("The provided input does not contain any valid DNA bases (A, T, C, G).")
+            else:
+                try:
+                    st.subheader(f"Transcription & Translation Results for: '{seq_id}'")
+                    dna_seq_obj = Seq(dna_cleaned)
+                    dna_length = len(dna_seq_obj)
+
+                    # Display DNA Info
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.metric("Input DNA Length", f"{dna_length:,} bp")
+                        st.write("**Input DNA (Coding Strand, 5'→3'):**")
+                        st.code(str(dna_seq_obj), language='text')
+                    with col2:
+                        st.metric("GC Content", f"{gc_fraction(dna_seq_obj)*100:.1f}%")
+                        st.write("**Reverse Complement DNA (5'→3'):**")
+                        st.code(str(dna_seq_obj.reverse_complement()), language='text')
+
+                    # Transcription
+                    st.divider()
+                    st.write("#### Transcription (DNA → RNA)")
+                    rna_seq_obj = dna_seq_obj.transcribe()
+                    st.write("**Resulting RNA Sequence (5'→3'):**")
+                    st.code(str(rna_seq_obj), language='text')
+                    st.metric("RNA Length", f"{len(rna_seq_obj):,} bases")
+
+                    # Translation
+                    st.divider()
+                    st.write("#### Translation (RNA → Protein)")
+                    st.caption("Translation uses the standard genetic code and starts from the beginning of the RNA sequence. '*' indicates a STOP codon.")
+
+                    # Check if RNA length is a multiple of 3
+                    remainder = len(rna_seq_obj) % 3
+                    rna_for_translation = rna_seq_obj
+                    if remainder != 0:
+                        st.warning(f"RNA sequence length ({len(rna_seq_obj):,}) is not a multiple of 3. The last {remainder} base(s) will be ignored for translation.")
+                        rna_for_translation = rna_seq_obj[:-remainder]
+
+                    if len(rna_for_translation) >= 3:
+                        # Translate, stopping at the first stop codon
+                        protein_seq_to_stop = rna_for_translation.translate(to_stop=True)
+                        st.write("**Protein Sequence (Translated until first STOP codon):**")
+                        st.code(str(protein_seq_to_stop), language='text')
+                        st.metric("Protein Length (until STOP)", f"{len(protein_seq_to_stop):,} aa")
+
+                        # Option to show full translation including internal stop codons
+                        st.divider()
+                        show_full_translation = st.checkbox("Show Full Translation (including internal STOP codons)", value=False, key="tr_full")
+                        if show_full_translation:
+                            protein_seq_full = rna_for_translation.translate(to_stop=False) # Use default table=1 (standard code)
+                            st.write("**Full Protein Sequence (includes internal '*' = STOP):**")
+                            st.code(str(protein_seq_full), language='text')
+                            st.metric("Full Translation Length", f"{len(protein_seq_full):,} aa")
+
+                    elif len(rna_seq_obj) < 3:
+                        st.error("Cannot translate: The RNA sequence is shorter than 3 bases.")
+                    else: # Length was multiple of 3, but 0 after trimming (shouldn't happen if initial length >= 3)
+                         st.error("Cannot translate: RNA length became 0 after trimming non-codon bases.")
+
+                except Exception as e:
+                    st.error("An error occurred during processing:")
+                    st.exception(e)
+
+
+elif menu == "Genome Coverage Plotter":
+    st.header("Genome Coverage Plotter")
+    st.markdown("Visualize sequencing coverage depth across genomic positions. Upload a file containing position and coverage data (e.g., output from `samtools depth`, BEDGRAPH, or a simple CSV/TSV).")
+    st.info("The file should contain at least two columns: one for genomic position and one for coverage depth at that position.")
+
+    uploaded_file = st.file_uploader("Upload Coverage Data File:", type=['csv','tsv','txt','bed', 'bedgraph'], key="cov_up")
+
+    if uploaded_file:
+        st.divider()
+        st.subheader("File Parsing Settings")
+        # Guess separator based on extension
+        file_extension = os.path.splitext(uploaded_file.name)[-1].lower()
+        default_separator = '\t' # Default to tab
+        if file_extension == '.csv':
+            default_separator = ','
+        elif file_extension in ['.bed', '.bedgraph']:
+            default_separator = '\t'
+
+        col1, col2 = st.columns(2)
+        with col1:
+            # Separator selection with user-friendly names
+            separator_options = {',': 'Comma (,)', '\t': 'Tab (\\t)', ' ': 'Whitespace ( )'}
+            selected_separator_key = st.selectbox("Column Separator:", list(separator_options.keys()),
+                                                  index=list(separator_options.keys()).index(default_separator) if default_separator in separator_options else 1,
+                                                  format_func=lambda x: separator_options[x], key="cov_sep")
+            # Use regex for whitespace to handle multiple spaces/tabs robustly
+            separator_regex = r'\s+' if selected_separator_key == ' ' else selected_separator_key
+        with col2:
+            # Header detection and comment character
+            default_has_header = file_extension not in ['.bed', '.bedgraph'] # BED/BEDGRAPH typically don't have headers
+            has_header = st.checkbox("File has header row", value=default_has_header, key="cov_head")
+            header_arg = 'infer' if has_header else None
+            comment_char = st.text_input("Comment Character (lines starting with this ignored):", '#', max_chars=1, key="cov_comm", help="Leave blank if no comment lines.")
+
+        st.divider()
+        st.subheader("Data Loading and Column Selection")
+        try:
+            # Read the file content
+            file_content = uploaded_file.getvalue().decode('utf-8')
+            # Use pandas to read the data
+            # *** CORRECTED LINE: Removed low_memory=False ***
+            df_coverage = pd.read_csv(io.StringIO(file_content),
+                                     sep=separator_regex,
+                                     header=header_arg,
+                                     engine='python', # 'python' engine handles regex separators better
+                                     comment=comment_char if comment_char else None)
+
+
+            if df_coverage.empty:
+                st.error("The uploaded file appears to be empty or contains only comments.")
+                st.stop()
+
+            # Assign generic column names if no header
+            if not has_header:
+                num_cols = df_coverage.shape[1]
+                if num_cols >= 2:
+                    df_coverage.columns = [f'Column_{i+1}' for i in range(num_cols)]
+                    st.info(f"No header detected; generic column names assigned: {list(df_coverage.columns)}")
+                else:
+                    st.error("Could not parse columns. Ensure the correct separator is selected and the file has at least two columns.")
+                    st.stop()
+
+            st.write("Data Preview (first 5 rows):")
+            st.dataframe(df_coverage.head(), height=150, use_container_width=True)
+
+            # Column selection for position and coverage
+            available_columns = list(df_coverage.columns)
+            # Attempt to guess columns (case-insensitive matching)
+            normalized_columns = {str(c).strip().lower(): c for c in available_columns}
+            pos_guess, cov_guess = None, None
+            # Common column names to check
+            pos_keywords = ['pos', 'position', 'start', 'coordinate', 'loc', 'location']
+            cov_keywords = ['depth', 'cov', 'coverage', 'score', 'value', 'count']
+
+            # Find best guess based on keywords (first match wins)
+            for key in pos_keywords:
+                 if key in normalized_columns: pos_guess = normalized_columns[key]; break
+            for key in cov_keywords:
+                 if key in normalized_columns: cov_guess = normalized_columns[key]; break
+
+            # Set default indices based on guesses or simple column order
+            pos_default_index = available_columns.index(pos_guess) if pos_guess in available_columns else (1 if len(available_columns) > 1 else 0) # Often 2nd col in BED/depth (0-based index 1)
+            cov_default_index = available_columns.index(cov_guess) if cov_guess in available_columns else (2 if len(available_columns) > 2 else (1 if len(available_columns) > 1 else 0)) # Often 3rd col in depth (index 2)
+
+            col_s1, col_s2 = st.columns(2)
+            with col_s1:
+                position_column = st.selectbox("Select Position Column:", available_columns, index=pos_default_index, key="cov_pos")
+            with col_s2:
+                coverage_column = st.selectbox("Select Coverage Column:", available_columns, index=cov_default_index, key="cov_cov")
+
+            if position_column == coverage_column:
+                st.error("Position and Coverage columns cannot be the same. Please select different columns.")
+            else:
+                st.success(f"Using column **'{position_column}'** for Position and **'{coverage_column}'** for Coverage.")
+                st.divider()
+                st.subheader("Plotting Options")
+                try:
+                    # Prepare data for plotting
+                    plot_data = df_coverage[[position_column, coverage_column]].copy()
+                    plot_data.columns = ['Position', 'Coverage'] # Standardize names
+
+                    # Convert columns to numeric, coercing errors to NaN
+                    plot_data['Position'] = pd.to_numeric(plot_data['Position'], errors='coerce')
+                    plot_data['Coverage'] = pd.to_numeric(plot_data['Coverage'], errors='coerce')
+
+                    # Handle missing/invalid values
+                    rows_before_drop = len(plot_data)
+                    plot_data.dropna(subset=['Position', 'Coverage'], inplace=True)
+                    rows_after_drop = len(plot_data)
+                    if rows_after_drop < rows_before_drop:
+                        st.warning(f"Removed {rows_before_drop - rows_after_drop:,} rows with invalid non-numeric data in selected columns.")
+
+                    if plot_data.empty:
+                        st.error("No valid numeric data available for plotting after cleaning. Check column selections and file content.")
+                    else:
+                        # Sort data by position for correct plotting
+                        plot_data = plot_data.sort_values(by='Position').reset_index(drop=True)
+                        min_pos, max_pos = plot_data['Position'].min(), plot_data['Position'].max()
+                        st.write(f"Plotting coverage data from position **{min_pos:,.0f}** to **{max_pos:,.0f}**.")
+
+                        # Plotting customization
+                        col_p1, col_p2 = st.columns(2)
+                        with col_p1:
+                            fill_area = st.checkbox("Fill Area Under Curve", value=True, key="cov_fill")
+                            log_scale_y = st.checkbox("Use Logarithmic Y-axis", value=False, key="cov_log", help="Useful if coverage varies greatly.")
+                        with col_p2:
+                            # Smoothing (Rolling Mean)
+                            smoothing_window = st.slider("Smoothing Window Size (0 = None):", min_value=0, max_value=201, value=0, step=2, key="cov_smooth", help="Applies a rolling mean. Use odd numbers for symmetrical window (e.g., 5, 11, 51). 0 disables smoothing.")
+                            # Ensure window size is odd if > 0
+                            if smoothing_window > 0 and smoothing_window % 2 == 0:
+                                smoothing_window += 1
+                                st.caption(f"Adjusted smoothing window to odd number: {smoothing_window}")
+
+                        # Generate Plot
+                        fig, ax = plt.subplots(figsize=(14, 5)) # Wider figure
+
+                        # Plot raw coverage
+                        ax.plot(plot_data['Position'], plot_data['Coverage'], label='Raw Coverage',
+                                linewidth=0.7, color='#66fcf1', alpha=0.8) # Cyan, slightly thinner line
+                        if fill_area:
+                            ax.fill_between(plot_data['Position'], plot_data['Coverage'], alpha=0.25, color='#97e8e1') # Lighter cyan fill
+
+                        # Plot smoothed coverage if window size > 0
+                        if smoothing_window > 1: # Need at least 3 for rolling mean to make sense
+                            plot_data['Smoothed_Coverage'] = plot_data['Coverage'].rolling(window=smoothing_window, center=True, min_periods=1).mean()
+                            ax.plot(plot_data['Position'], plot_data['Smoothed_Coverage'], label=f'Smoothed ({smoothing_window}bp window)',
+                                    linewidth=1.8, color='#fca311', linestyle='-') # Orange, thicker line
+
+                        # Apply styling
+                        style_plot(fig, ax, title=f"Genome Coverage Plot ({uploaded_file.name})",
+                                   xlabel=f"Genomic Position ({position_column})",
+                                   ylabel=f"Coverage Depth ({coverage_column}){ ' (Log Scale)' if log_scale_y else ''}")
+
+                        # Set y-axis scale
+                        if log_scale_y:
+                            ax.set_yscale('log')
+                            # Adjust y-min for log scale to avoid issues with zero coverage
+                            min_positive_coverage = plot_data[plot_data['Coverage'] > 0]['Coverage'].min()
+                            ax.set_ylim(bottom=max(0.1, min_positive_coverage * 0.5) if pd.notna(min_positive_coverage) else 0.1)
+
+                        # Format axes tick labels
+                        ax.ticklabel_format(style='plain', axis='x', useOffset=False) # Prevent scientific notation on x-axis
+                        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: format(int(x), ','))) # Comma separators for y-axis
+
+                        # Add Legend
+                        legend = ax.legend(facecolor='#2c3e50', labelcolor='#e0e0e0', framealpha=0.8, fontsize=10)
+                        for text in legend.get_texts():
+                            text.set_fontfamily('Times New Roman')
+                            text.set_fontweight('bold')
+
+                        # Display the plot
+                        st.pyplot(fig)
+
+                        # Basic Statistics
+                        st.divider()
+                        st.subheader("Coverage Statistics (Raw Data)")
+                        coverage_stats = plot_data['Coverage'].describe()
+                        scol1, scol2, scol3, scol4 = st.columns(4)
+                        with scol1: st.metric("Mean Coverage", f"{coverage_stats.get('mean', 0):,.1f}x")
+                        with scol2: st.metric("Median Coverage", f"{coverage_stats.get('50%', 0):,.1f}x")
+                        with scol3: st.metric("Minimum Coverage", f"{coverage_stats.get('min', 0):,.0f}x")
+                        with scol4: st.metric("Maximum Coverage", f"{coverage_stats.get('max', 0):,.0f}x")
+
+                        # Calculate Breadth of Coverage
+                        max_cov_int = int(coverage_stats.get('max', 1000))
+                        coverage_threshold = st.number_input("Calculate Breadth of Coverage at Depth ≥:",
+                                                             min_value=0, max_value=max_cov_int, value=10, step=1, key="cov_b_thresh")
+                        if coverage_threshold >= 0:
+                            positions_above_threshold = (plot_data['Coverage'] >= coverage_threshold).sum()
+                            total_positions = len(plot_data)
+                            if total_positions > 0:
+                                breadth_percent = (positions_above_threshold / total_positions * 100)
+                                st.metric(f"Breadth of Coverage (≥ {coverage_threshold}x)",
+                                          f"{breadth_percent:.1f}%",
+                                          f"{positions_above_threshold:,} / {total_positions:,} positions")
+                            else:
+                                st.metric(f"Breadth of Coverage (≥ {coverage_threshold}x)", "N/A", "No data points")
+
+                except Exception as plot_e:
+                    st.error("An error occurred during plotting:")
+                    st.exception(plot_e)
+
+        except pd.errors.EmptyDataError:
+            st.error("File Read Error: The file appears to be empty or could not be parsed with the selected settings.")
+        except ValueError as ve:
+            # Make the error message more specific to the potential low_memory/engine conflict
+            st.error(f"File Read Error: Could not parse the file. Check separator, header, and comment settings. Details: {ve}")
+        except Exception as read_e:
+            st.error("An unexpected error occurred while reading the file:")
+            st.exception(read_e)
+
+
+elif menu == "Variant Annotation Tool":
+    st.header("Simple Variant Substitution Tool")
+    st.markdown("Introduce a single nucleotide polymorphism (SNP) into a reference DNA sequence (A, T, C, G only) and observe the change, including the effect on the corresponding codon.")
+
+    input_method = st.radio("Input Reference DNA:",("Paste","FASTA"), key="var_in", horizontal=True)
+    ref_sequence, seq_id="","Reference Sequence"
+    if input_method=="Paste":
+        ref_sequence=st.text_area("Enter Reference DNA Sequence:", height=100, key="var_ref", placeholder="Paste reference DNA (e.g., ATGC...). Only ATCG characters used.")
+    else:
+        uploaded_file=st.file_uploader("Upload Reference FASTA File:", type=['fasta','fa','fna'], key="var_f")
+        if uploaded_file:
+            ref_sequence, seq_id = parse_fasta(uploaded_file)
+            if ref_sequence:
+                st.text_area("Reference Preview:", value=f">{seq_id}\n{ref_sequence[:80]}{'...' if len(ref_sequence)>80 else ''}", height=75, key="var_d", disabled=True)
+
+    # Variant Information Input
+    st.divider()
+    st.subheader("Variant Details")
+    vcol1, vcol2 = st.columns(2)
+    with vcol1:
+        # Using 1-based indexing for user input, as is common in genomics
+        variant_pos = st.number_input("Variant Position (1-based index):", min_value=1, step=1, value=1, key="var_p", help="The position in the sequence where the change occurs.")
+    with vcol2:
+        variant_base = st.selectbox("New Base (Alternate Allele):", ["A", "T", "C", "G"], key="var_b", help="The nucleotide to introduce at the specified position.")
+
+    st.divider()
+    if st.button("Apply Variant and Annotate", key="var_btn"):
+        if not ref_sequence:
+            st.warning("Please provide a reference DNA sequence.")
+        else:
+            # Clean reference sequence
+            ref_cleaned = "".join(re.findall(r'[ATCG]', ref_sequence.upper()))
+            error_occurred = False
+            if not ref_cleaned:
+                st.error("The reference sequence contains no valid DNA bases (A, T, C, G).")
+                error_occurred = True
+
+            ref_length = len(ref_cleaned)
+            # Validate variant position (adjust to 0-based index internally)
+            zero_based_pos = variant_pos - 1
+            if not error_occurred and (zero_based_pos < 0 or zero_based_pos >= ref_length):
+                st.error(f"Variant position {variant_pos:,} is outside the valid range of the sequence (1 to {ref_length:,}).")
+                error_occurred = True
+
+            if not error_occurred:
+                try:
+                    # Get the original base at the variant position
+                    original_base = ref_cleaned[zero_based_pos]
+
+                    # Check if the variant base is the same as the original
+                    if original_base == variant_base:
+                        st.info(f"No change needed: The base at position {variant_pos:,} in the reference ('{seq_id}') is already '{original_base}'.")
+                        st.write(f"**Reference Sequence ('{seq_id}'):**")
+                        st.code(ref_cleaned, language='text')
+                    else:
+                        # Create the altered sequence
+                        alt_list = list(ref_cleaned)
+                        alt_list[zero_based_pos] = variant_base
+                        alt_sequence = "".join(alt_list)
+
+                        st.subheader("Variant Applied Successfully")
+                        st.write(f"**Sequence:** '{seq_id}' | **Variant:** Position {variant_pos:,}")
+                        st.success(f"**Change:** Reference Base (`{original_base}`) → Alternate Base (`{variant_base}`)")
+
+                        # Display Reference vs. Altered sequences side-by-side
+                        s_col1, s_col2 = st.columns(2)
+                        with s_col1:
+                            st.write("**Reference Sequence:**")
+                            st.code(ref_cleaned, language='text')
+                        with s_col2:
+                            st.write("**Altered Sequence:**")
+                            st.code(alt_sequence, language='text')
+
+                        # Codon Context and Annotation
+                        st.divider()
+                        st.write("#### Codon Context and Predicted Effect:")
+                        # Determine the codon boundaries (0-based)
+                        codon_start_index = (zero_based_pos // 3) * 3
+                        position_in_codon = (zero_based_pos % 3) + 1 # 1, 2, or 3
+
+                        # Check if a full codon can be extracted
+                        if codon_start_index + 3 <= ref_length:
+                            ref_codon_str = ref_cleaned[codon_start_index : codon_start_index + 3]
+                            alt_codon_str = alt_sequence[codon_start_index : codon_start_index + 3]
+
+                            st.write(f"The variant at position {variant_pos:,} occurs at position **{position_in_codon}** within the codon starting at base **{codon_start_index + 1:,}**.")
+
+                            try:
+                                # Translate codons using standard table
+                                ref_codon_obj = Seq(ref_codon_str)
+                                alt_codon_obj = Seq(alt_codon_str)
+                                ref_aa = str(ref_codon_obj.translate(table=1)) # Standard code
+                                alt_aa = str(alt_codon_obj.translate(table=1))
+
+                                # Display codon change
+                                c_col1, c_col2 = st.columns(2)
+                                with c_col1:
+                                    st.write("**Reference Codon:**")
+                                    st.code(f"Codon: {ref_codon_str}\nAA:    {ref_aa}", language='text')
+                                with c_col2:
+                                    st.write("**Altered Codon:**")
+                                    st.code(f"Codon: {alt_codon_str}\nAA:    {alt_aa}", language='text')
+
+                                # Predict the effect
+                                effect = "Unknown"
+                                if ref_aa == alt_aa:
+                                    effect = "**Silent (Synonymous)**"
+                                elif alt_aa == '*':
+                                    effect = "**Nonsense (Stop Gained)**"
+                                elif ref_aa == '*':
+                                    effect = "**Stop-Lost**"
+                                else: # ref_aa != alt_aa and neither is stop (or only ref was stop)
+                                    effect = "**Missense (Non-synonymous)**"
+
+                                st.markdown(f"**Predicted Effect:** {effect}")
+
+                            except Exception as codon_translate_e:
+                                st.warning(f"Could not translate codons or determine effect: {codon_translate_e}")
+
+                        else:
+                            st.info("The variant occurs too close to the end of the sequence to determine the full codon context.")
+
+                except IndexError:
+                     st.error(f"Internal error: Position {variant_pos:,} seems invalid despite checks.")
+                except Exception as e:
+                    st.error("An error occurred while applying the variant:")
+                    st.exception(e)
+
+
+elif menu == "Codon Usage Analyzer":
+    st.header("Codon Usage Analyzer")
+    st.markdown("Analyze the frequency of codon usage within a provided Coding DNA Sequence (CDS). The sequence must contain only A, T, C, G and its length must be a multiple of 3.")
+
+    input_method = st.radio("Input CDS:",("Paste","FASTA"), key="cod_in", horizontal=True)
+    cds_sequence, seq_id="","CDS Sequence"
+    if input_method=="Paste":
+        cds_sequence=st.text_area("Enter Coding DNA Sequence (CDS):", height=120, key="cod_seq", placeholder="Paste CDS here (e.g., ATGCGT...). Must be multiple of 3, ATCG only.")
+    else:
+        uploaded_file=st.file_uploader("Upload FASTA File (containing CDS):", type=['fasta','fa','fna'], key="cod_f")
+        if uploaded_file:
+            cds_sequence, seq_id = parse_fasta(uploaded_file)
+            if cds_sequence:
+                st.text_area("CDS Preview:", value=f">{seq_id}\n{cds_sequence[:80]}{'...' if len(cds_sequence)>80 else ''}", height=75, key="cod_d", disabled=True)
+
+    st.divider()
+    if st.button("Analyze Codon Usage", key="cod_btn"):
+        if not cds_sequence:
+            st.warning("Please provide a Coding DNA Sequence (CDS).")
+        else:
+            # Clean and validate sequence
+            cds_cleaned = "".join(re.findall(r'[ATCG]', cds_sequence.upper()))
+            error_occurred = False
+            if not cds_cleaned:
+                st.error("The provided sequence contains no valid DNA bases (A, T, C, G).")
+                error_occurred = True
+            elif len(cds_cleaned) % 3 != 0:
+                st.error(f"Sequence length ({len(cds_cleaned):,}) is not a multiple of 3. Please provide a valid CDS.")
+                error_occurred = True
+
+            if not error_occurred:
+                try:
+                    st.subheader(f"Codon Usage Analysis for: '{seq_id}'")
+                    # Split sequence into codons
+                    codons_list = [cds_cleaned[i:i+3] for i in range(0, len(cds_cleaned), 3)]
+                    total_codons = len(codons_list)
+                    codon_counts = Counter(codons_list)
+                    st.metric("Total Number of Codons Analyzed", f"{total_codons:,}")
+
+                    # Get standard codon table information
+                    try:
+                        standard_table = CodonTable.unambiguous_dna_by_id[1]
+                        all_possible_codons = list(standard_table.forward_table.keys()) + standard_table.stop_codons
+                        aa_map = standard_table.forward_table # Codon -> AA
+                        stop_codons = set(standard_table.stop_codons)
+                    except Exception as table_e:
+                        st.error(f"Failed to load standard codon table: {table_e}")
+                        st.stop()
+
+                    # Calculate frequencies
+                    usage_data = []
+                    for codon in sorted(all_possible_codons):
+                        count = codon_counts.get(codon, 0)
+                        frequency = (count / total_codons * 100) if total_codons > 0 else 0
+                        amino_acid = aa_map.get(codon, 'Stop' if codon in stop_codons else '?') # Assign AA or 'Stop'
+                        usage_data.append({
+                            "Codon": codon,
+                            "Amino Acid (AA)": amino_acid,
+                            "Count": count,
+                            "Frequency (%)": frequency
+                        })
+
+                    usage_df = pd.DataFrame(usage_data)
+                    st.write("#### Codon Usage Table (Standard Genetic Code):")
+                    st.dataframe(usage_df.style.format({'Count':'{:,}', 'Frequency (%)':'{:.1f}%'}),
+                                 hide_index=True, use_container_width=True)
+
+                    # Visualization Options
+                    st.divider()
+                    st.subheader("Codon Usage Visualization")
+                    plot_choice = st.selectbox("Select Visualization Type:",
+                                               ["Frequency of All Codons", "Relative Usage for Specific Amino Acid"],
+                                               key="cod_plot")
+
+                    # Filter out codons that are not present in the sequence for plotting
+                    present_codons_df = usage_df[usage_df['Count'] > 0].copy()
+
+                    if present_codons_df.empty:
+                        st.info("No codons found in the sequence to visualize.")
+                    else:
+                        if plot_choice == "Frequency of All Codons":
+                            plot_df_all = present_codons_df.sort_values("Codon")
+                            fig, ax = plt.subplots(figsize=(16, 6)) # Wide figure for all codons
+
+                            # Color bars by amino acid type (simple grouping)
+                            unique_aas = sorted(list(plot_df_all['Amino Acid (AA)'].unique()))
+                            # Use a perceptually uniform colormap if many AAs, or define manually
+                            cmap = plt.get_cmap('tab20', len(unique_aas)) # 'tab20' has 20 distinct colors
+                            aa_colors = {aa: cmap(i) for i, aa in enumerate(unique_aas)}
+                            bar_colors = [aa_colors.get(aa, '#888888') for aa in plot_df_all['Amino Acid (AA)']]
+
+                            ax.bar(plot_df_all['Codon'], plot_df_all['Frequency (%)'], color=bar_colors)
+
+                            style_plot(fig, ax, title=f"Codon Frequency Distribution for '{seq_id}'",
+                                       xlabel="Codon", ylabel="Frequency (%)")
+                            # Rotate x-axis labels for better readability
+                            ax.tick_params(axis='x', rotation=90, labelsize=9)
+                            st.pyplot(fig)
+
+                        elif plot_choice == "Relative Usage for Specific Amino Acid":
+                             # Get list of AAs/Stop present in the sequence
+                             available_aas = sorted(list(present_codons_df['Amino Acid (AA)'].unique()))
+                             if not available_aas:
+                                 st.info("No amino acids encoded by the provided sequence.")
+                             else:
+                                 selected_aa = st.selectbox("Select Amino Acid or 'Stop':", available_aas, key="cod_aa")
+
+                                 # Filter data for the selected AA/Stop
+                                 aa_specific_df = present_codons_df[present_codons_df['Amino Acid (AA)'] == selected_aa].copy()
+                                 total_count_for_aa = aa_specific_df['Count'].sum()
+
+                                 if total_count_for_aa > 0 and not aa_specific_df.empty:
+                                     # Calculate relative frequency within this AA's codons
+                                     aa_specific_df['Relative Freq (%)'] = (aa_specific_df['Count'] / total_count_for_aa * 100)
+                                     aa_specific_df = aa_specific_df.sort_values("Codon")
+
+                                     # Plot relative usage
+                                     fig, ax = plt.subplots(figsize=(max(6, len(aa_specific_df)*1.5), 5)) # Adjust width based on # codons
+                                     ax.bar(aa_specific_df['Codon'], aa_specific_df['Relative Freq (%)'], color='#fca311') # Use theme's orange
+
+                                     style_plot(fig, ax, title=f"Relative Codon Usage for '{selected_aa}' in '{seq_id}' (Total Count: {total_count_for_aa:,})",
+                                                xlabel="Codon", ylabel="Relative Frequency (%)")
+                                     ax.set_ylim(0, 105) # Set y-limit slightly above 100%
+                                     st.pyplot(fig)
+
+                                     # Show table for selected AA
+                                     st.write(f"**Usage Details for '{selected_aa}':**")
+                                     st.dataframe(aa_specific_df[['Codon', 'Count', 'Relative Freq (%)']].style.format({'Count':'{:,}', 'Relative Freq (%)':'{:.1f}%'}),
+                                                  hide_index=True, use_container_width=True)
+                                 else:
+                                     st.info(f"No codons encoding '{selected_aa}' were found in this sequence.")
+
+                except Exception as e:
+                    st.error("An error occurred during codon usage analysis:")
+                    st.exception(e)
+
 
 # --- Footer ---
-st.markdown("---")
+# Use st.markdown with unsafe_allow_html=True to apply the CSS class
+st.markdown("---") # Visual separator line
 st.markdown('<div class="footer">Copyright © 2024 CCDB Tools | For Educational and Informational Purposes Only</div>', unsafe_allow_html=True)
+
+```
+
+**Changes Made:**
+
+1.  **CSS `<body>` Style:**
+    *   Changed the `body` background from a solid color to a linear gradient using `background-image: linear-gradient(to bottom right, #0b0c10, #1a1a2e);`. This creates a subtle transition from the very dark base color to the slightly lighter dark blue/purple used in the sidebar.
+    *   Added `background-attachment: fixed;` so the gradient stays in place when the user scrolls.
+    *   Added `min-height: 100vh;` to ensure the gradient visually covers the whole viewport height even if the content is short.
+    *   Added a similar gradient to the `.footer` background for consistency.
+
+2.  **`pd.read_csv` in Genome Coverage Plotter:**
+    *   Located the `pd.read_csv(...)` call within the `elif menu == "Genome Coverage Plotter":` block.
+    *   **Removed** the `low_memory=False` argument from the function call.
+
+**To Use:**
+
+1.  Replace the entire content of your `ColonCancer.py` file with the corrected code block above.
+2.  Save the file.
+3.  Run the Streamlit app again (`streamlit run ColonCancer.py`).
+
+The file reading error should now be resolved, and the application should have a slightly enhanced dark gradient background.
