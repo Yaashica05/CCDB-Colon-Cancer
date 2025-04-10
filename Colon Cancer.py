@@ -65,17 +65,17 @@ st.markdown(
 
     /* --- Specific Element Styling (REFINED DARK THEME) --- */
 
-    /* Body background - Subtle Dark Gradient *** UPDATED *** */
+    /* Body background - Subtle Dark Gradient *** UPDATED BACKGROUND *** */
     body {
-        background-color: #0b0c10; /* Fallback */
-        background-image: linear-gradient(to bottom right, #0b0c10, #1a1a2e); /* Dark blue/purple gradient */
+        background-color: #111111; /* Fallback */
+        background-image: linear-gradient(to bottom right, #111111, #2d3436); /* Dark grey tones gradient */
         background-attachment: fixed; /* Keep gradient fixed during scroll */
         min-height: 100vh; /* Ensure gradient covers full height */
     }
 
-    /* Main app container - Dark Blue-Grey */
+    /* Main app container - Dark Blue-Grey *** UPDATED BACKGROUND *** */
     .stApp {
-        background-color: #1f2833; /* Main content background */
+        background-color: #222831; /* Complementary dark shade */
         padding: 30px; border-radius: 10px;
         border: 1px solid #45a29e; /* Teal border */
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
@@ -85,7 +85,7 @@ st.markdown(
 
     /* Sidebar Styling - Slightly different shade */
     [data-testid="stSidebar"] {
-        background-color: #1a1a2e; /* Dark Blue/Purple */
+        background-color: #1a1a2e; /* Dark Blue/Purple (kept for contrast) */
         border-right: 2px solid #45a29e; /* Teal separator */
         padding-top: 2rem; /* Add some top padding */
     }
@@ -137,12 +137,12 @@ st.markdown(
     .stSelectbox>div>div>div, /* Container for selected value */
     .stMultiSelect>div>div /* Container for multiselect */
     {
-        border: 1px solid #4f5b66; border-radius: 5px; background-color: #2c3e50; /* Darker input bg */
+        border: 1px solid #4f5b66; border-radius: 5px; background-color: #393e46; /* Slightly lighter input bg */
         color: #e1e1e1; padding: 9px 12px;
          /* Font handled globally */
     }
     .stTextArea>div>textarea { min-height: 150px; }
-    .stSelectbox [data-baseweb="select"] > div { background-color: #2c3e50; } /* Ensure dropdown bg matches */
+    .stSelectbox [data-baseweb="select"] > div { background-color: #393e46; } /* Ensure dropdown bg matches */
     .stMultiSelect [data-baseweb="tag"] { background-color: #45a29e; color: #0b0c10; } /* Teal tags */
 
     /* Input Placeholders */
@@ -176,11 +176,11 @@ st.markdown(
     /* Tables - Consistent Dark Theme */
     table {
         border-collapse: separate; border-spacing: 0; width: 100%; margin-bottom: 1.5rem;
-        background-color: #25303a; /* Slightly lighter than main bg */
+        background-color: #393e46; /* Match input field background */
         border: 1px solid #4f5b66; border-radius: 6px; overflow: hidden;
     }
     table th {
-        text-align: left; padding: 12px 15px; background-color: #2c3e50; /* Header bg */
+        text-align: left; padding: 12px 15px; background-color: #4a515c; /* Slightly darker header bg */
         color: #97e8e1; /* Header text - Lighter Cyan */
         border-bottom: 2px solid #45a29e; /* Teal bottom border */
          /* Font handled globally */
@@ -202,9 +202,9 @@ st.markdown(
         text-decoration: underline !important; /* Add underline on hover */
     }
     /* Zebra striping */
-    table tbody tr:nth-of-type(odd) { background-color: #25303a; } /* Base row color */
-    table tbody tr:nth-of-type(even) { background-color: #2c3e50; } /* Slightly different even row */
-    table tbody tr:hover { background-color: #3a4b5a; } /* Hover row color */
+    table tbody tr:nth-of-type(odd) { background-color: #393e46; } /* Base row color */
+    table tbody tr:nth-of-type(even) { background-color: #4a515c; } /* Slightly different even row */
+    table tbody tr:hover { background-color: #5b6470; } /* Hover row color */
 
     /* Alerts - Themed */
     .stAlert { border-radius: 5px; padding: 15px; font-size: 1.05em; border: 1px solid; }
@@ -226,8 +226,8 @@ st.markdown(
     /* Footer - Fixed at bottom */
     .footer {
         position: fixed; left: 0; bottom: 0; width: 100%;
-        background-color: #0b0c10; /* Match body gradient start */
-        background-image: linear-gradient(to right, #0b0c10, #1a1a2e); /* Match body gradient */
+        background-color: #111111; /* Match body gradient start */
+        background-image: linear-gradient(to right, #111111, #2d3436); /* Match body gradient */
         color: #97e8e1; /* Lighter Cyan text */
         text-align: center; padding: 12px; font-size: 14px;
         border-top: 3px solid #45a29e; /* Teal top border */
@@ -243,18 +243,18 @@ st.markdown(
     [data-testid="stExpander"] {
         border: 1px solid #4f5b66;
         border-radius: 5px;
-        background-color: #25303a; /* Slightly lighter than main bg */
+        background-color: #393e46; /* Match input field background */
         margin-bottom: 1rem; /* Add some space below expanders */
     }
     [data-testid="stExpander"] summary {
-        background-color: #2c3e50; /* Header part */
+        background-color: #4a515c; /* Match table header background */
         color: #97e8e1; /* Lighter cyan text */
         border-radius: 5px 5px 0 0;
         padding: 10px 15px;
         /* Font handled globally */
     }
     [data-testid="stExpander"] summary:hover {
-        background-color: #3a4b5a;
+        background-color: #5b6470; /* Match table hover */
     }
     /* Expander content */
     [data-testid="stExpander"] [data-testid="stVerticalBlock"] {
@@ -271,7 +271,7 @@ st.markdown(
 
     /* Style Streamlit Metric */
     [data-testid="stMetric"] {
-        background-color: #2c3e50; /* Slightly different background */
+        background-color: #393e46; /* Match input/table background */
         border: 1px solid #4f5b66;
         border-radius: 5px;
         padding: 15px;
@@ -285,6 +285,20 @@ st.markdown(
     [data-testid="stMetricDelta"] { /* Color for delta is often set programmatically */
          color: #e0e0e0 !important; /* Default delta color */
          /* Font handled globally */
+    }
+
+    /* Ensure code blocks match theme */
+    .stCodeBlock code {
+        background-color: #2c3e50; /* Match plot background */
+        color: #e0e0e0;
+        border: 1px solid #4f5b66;
+        border-radius: 5px;
+        padding: 10px;
+        font-family: monospace !important; /* Keep monospace for code */
+        font-weight: normal !important; /* Code usually not bold */
+        font-size: 0.95em;
+        white-space: pre-wrap; /* Allow wrapping */
+        word-wrap: break-word;
     }
 
     </style>
@@ -333,7 +347,9 @@ def format_link(value, column_name):
     s_value = str(value).strip()
     if not s_value: return ""
 
+    # Standardize column name internally for logic checks
     col_name_std = column_name.strip().title()
+
     # Use the orange link color defined in CSS (fca311) via inline style for certainty
     # CSS handles hover and boldness
     link_style = 'style="color:#fca311 !important;"' # Important ensures it overrides default link colors
@@ -365,10 +381,11 @@ def format_link(value, column_name):
              return f'<a href="{url}" target="_blank" {link_style}>{s_value}</a>'
 
         # General URL detection for specified columns or common link indicators
+        # OR if the value itself starts with http (this is the main fallback)
         elif (col_name_std in ['Blast', 'Conserved Domain', 'Link', 'Url', 'Reference']
               or 'link' in col_name_std.lower()
               or 'url' in col_name_std.lower()
-              or s_value.startswith("http")): # Check if the value itself looks like a URL
+              or s_value.startswith("http")):
 
              if s_value.startswith("http"):
                   # Shorten long URLs for display, show full URL in title tooltip
@@ -386,9 +403,9 @@ def format_link(value, column_name):
 # --- Helper function for Matplotlib Plot Styling ---
 def style_plot(fig, ax, title="", xlabel="", ylabel=""):
     """Applies consistent dark theme styling (including Times New Roman Bold) to a Matplotlib plot."""
-    fig.patch.set_facecolor('#1f2833') # Match app background
+    fig.patch.set_facecolor('#222831') # Match app background
     fig.patch.set_alpha(1.0) # Ensure figure background is opaque
-    ax.set_facecolor('#2c3e50') # Slightly different background for plot area
+    ax.set_facecolor('#393e46') # Match input field background
 
     # Titles and Labels (Times New Roman Bold)
     font_props = {'family': 'Times New Roman', 'weight': 'bold'}
@@ -404,7 +421,7 @@ def style_plot(fig, ax, title="", xlabel="", ylabel=""):
         label.set_fontweight('bold')
 
     # Grid
-    ax.grid(True, linestyle=':', alpha=0.4, color='#888888')
+    ax.grid(True, linestyle=':', alpha=0.4, color='#aaaaaa') # Slightly lighter grid
 
     # Spines (borders of the plot area)
     for spine in ax.spines.values():
@@ -414,7 +431,6 @@ def style_plot(fig, ax, title="", xlabel="", ylabel=""):
 
 # --- Main App Title ---
 st.title("🧬 CCDB: Colon Cancer Database and Bioinformatics Tools 🔬")
-# Removed the markdown separator as it's less needed with the theme
 
 # --- Sidebar Navigation ---
 with st.sidebar:
@@ -432,7 +448,6 @@ with st.sidebar:
     )
     st.divider()
     st.info("Ensure input files (FASTA, coverage data, etc.) are readily available for upload.")
-    # Optionally add more sidebar content, links, or info here
 
 
 # --- Page Content based on Menu Selection ---
@@ -572,31 +587,34 @@ elif menu == "Colon Cancer Database Search":
 
                     # Apply link formatting to relevant columns
                     formatted_results = results.copy() # Work on a copy
-                    # Define columns where link formatting should be attempted
-                    # Now also checks if value starts with http:// or https:// in format_link
+                    # Define columns where link formatting should *always* be attempted
+                    # (because their name implies they contain IDs or links)
                     link_potential_columns = ['Pubmed Id', 'Doi Id', 'Uniprot', 'Blast', 'Conserved Domain', 'Link', 'Url', 'Reference']
-                    # Add any other columns that contain 'link' or 'url' in their name
+                    # Add any other columns that contain 'link' or 'url' in their name (case-insensitive)
                     link_potential_columns.extend([col for col in formatted_results.columns
                                                    if ('link' in col.lower() or 'url' in col.lower())
                                                    and col not in link_potential_columns])
 
+                    # Add key ID columns explicitly if not already present (handles case variations)
+                    for key_col in ['Pubmed Id', 'Doi Id', 'Uniprot']:
+                        if key_col not in link_potential_columns:
+                            link_potential_columns.append(key_col)
 
+                    # Iterate through all columns in the results
                     for col in formatted_results.columns:
-                         # Apply formatting if the column name suggests a link OR if the function itself detects a link pattern
-                         # The format_link function now internally checks for http starts as a fallback
-                         # So we primarily need to apply it to columns expected to contain IDs or named links
-                         if col in link_potential_columns or col_name_std in ['Pubmed Id', 'Doi Id', 'Uniprot']: # Ensure key ID columns are processed
-                             try:
-                                 # Pass the *standardized* column name to format_link
-                                 formatted_results[col] = formatted_results[col].apply(lambda x: format_link(x, col))
-                             except Exception as apply_e:
-                                 st.warning(f"Link formatting failed for column '{col}': {apply_e}. Displaying raw data.")
+                        # *** CORRECTED LOGIC ***
+                        # Apply formatting if the column is one of the potential link columns.
+                        # The format_link function handles the specific logic based on the column name and value.
+                        if col in link_potential_columns:
+                            try:
+                                # Pass the current column name ('col') to format_link
+                                formatted_results[col] = formatted_results[col].apply(lambda x: format_link(x, col))
+                            except Exception as apply_e:
+                                st.warning(f"Link formatting attempt failed for column '{col}': {apply_e}. Displaying raw data.")
+                        # For other columns, the format_link function is not called, preserving original data.
 
                     # Display results as an HTML table to render links correctly
-                    # Use justify='left' for better readability
-                    # Add 'st-table' class for potential better integration with Streamlit styles
                     html_table = formatted_results.to_html(escape=False, index=False, na_rep='-', justify='left', classes=['st-table'])
-                    # Replace default pandas table styles with simpler ones if needed, but CSS should override
                     st.write(html_table, unsafe_allow_html=True)
                 else:
                     st.warning(f"No results found matching or containing '{query}' in the '{gene_col}' column.")
@@ -609,6 +627,7 @@ elif menu == "Colon Cancer Database Search":
                 st.error(f"An error occurred during the database search:")
                 st.exception(e) # Display the full error traceback for debugging
 
+# --- Other Tool Sections (Unchanged, but including them for completeness) ---
 
 elif menu == "DNA Sequence Analysis":
     st.header("DNA Sequence Analysis")
@@ -695,15 +714,16 @@ elif menu == "DNA Sequence Analysis":
                             # Translate from current frame, stopping at the first stop codon encountered
                             try:
                                 # Use standard table explicitly
-                                translation = str(seq_obj[frame:].translate(table=1, to_stop=True))
+                                translation = str(seq_obj[frame:].translate(table=1, to_stop=True, cds=False)) # Added cds=False for robustness
                             except CodonTable.TranslationError as trans_err:
                                 # Catch specific translation errors (e.g., seq length not multiple of 3)
-                                if "stop codon found" not in str(trans_err).lower(): # Ignore expected stop codon errors if to_stop=True
-                                    st.warning(f"Translation warning in frame {frame+1}: {trans_err}. Continuing scan.")
-                                # Even with error, continue scan
-                                translation = str(seq_obj[frame:].translate(table=1, to_stop=True, cds=False)) # Try without CDS check
+                                st.warning(f"Translation warning in frame {frame+1}: {trans_err}. Continuing scan.")
+                                translation = "" # Set to empty to avoid processing errors below
                             except Exception as trans_err:
                                 st.warning(f"General translation error in frame {frame+1}: {trans_err}. Skipping frame.")
+                                continue # Skip this frame
+
+                            if not translation: # Skip if translation failed or was empty
                                 continue
 
                             current_pos_in_translation = 0
@@ -719,20 +739,19 @@ elif menu == "DNA Sequence Analysis":
                                 if len(potential_orf) >= min_orf_aa:
                                     # Calculate DNA coordinates (1-based)
                                     start_dna_pos = frame + (start_codon_index * 3) + 1
-                                    # Adjust end position calculation - relies on `to_stop=True`
-                                    # End is start + (AA_length * 3) - 1
                                     end_dna_pos = start_dna_pos + (len(potential_orf) * 3) - 1
 
-                                    # Avoid adding duplicates if scanning finds same start multiple times
-                                    # (Shouldn't happen with current_pos_in_translation increment, but as safeguard)
-                                    if not any(o['Start (DNA)'] == start_dna_pos and o['Frame'] == frame+1 for o in orfs):
-                                        orfs.append({
-                                            "Frame": frame + 1,
-                                            "Start (DNA)": start_dna_pos,
-                                            "End (DNA)": end_dna_pos,
-                                            "Length (AA)": len(potential_orf),
-                                            "Protein Sequence (Preview)": potential_orf[:40] + "..." if len(potential_orf) > 40 else potential_orf
-                                        })
+                                    # Ensure end position doesn't exceed original sequence length
+                                    if end_dna_pos <= length:
+                                        # Avoid adding duplicates if scanning finds same start multiple times
+                                        if not any(o['Start (DNA)'] == start_dna_pos and o['Frame'] == frame+1 for o in orfs):
+                                            orfs.append({
+                                                "Frame": frame + 1,
+                                                "Start (DNA)": start_dna_pos,
+                                                "End (DNA)": end_dna_pos,
+                                                "Length (AA)": len(potential_orf),
+                                                "Protein Sequence (Preview)": potential_orf[:40] + "..." if len(potential_orf) > 40 else potential_orf
+                                            })
 
                                 # Move search position past the current 'M' to find subsequent ORFs
                                 current_pos_in_translation = start_codon_index + 1
@@ -834,7 +853,7 @@ elif menu == "Protein Sequence Analysis":
                         sizes = [helix * 100, turn * 100, sheet * 100] # Convert to percentages
 
                         # Only plot if fractions are meaningful
-                        if sum(sizes) > 0:
+                        if sum(sizes) > 0.1: # Use a small threshold to avoid plotting tiny values
                             # Define colors
                             colors = ['#66fcf1', '#fca311', '#ffbf00'] # Cyan, Orange, Amber
 
@@ -842,7 +861,7 @@ elif menu == "Protein Sequence Analysis":
 
                             # Use wedgeprops for styling, autopct for percentages
                             wedges, texts, autotexts = ax.pie(sizes, labels=labels, startangle=90, colors=colors, autopct='%1.1f%%',
-                                                wedgeprops={'edgecolor': '#1f2833', 'linewidth': 1.5}, # Thicker edge
+                                                wedgeprops={'edgecolor': '#222831', 'linewidth': 1.5}, # Thicker edge, match app bg
                                                 textprops={'color': '#e0e0e0'}) # Light text for labels
 
                             # Improve autopct text visibility (bold, dark text on light wedges)
@@ -867,7 +886,7 @@ elif menu == "Protein Sequence Analysis":
 
                             st.pyplot(fig)
                         else:
-                            st.info("Secondary structure fractions are all zero.")
+                            st.info("Secondary structure fractions are essentially zero or could not be calculated.")
 
                     except ZeroDivisionError:
                          st.warning("Could not calculate secondary structure fractions (possibly due to sequence length or composition).")
@@ -878,6 +897,7 @@ elif menu == "Protein Sequence Analysis":
                     st.error("An error occurred during protein sequence analysis:")
                     st.exception(e)
 
+# --- (Remaining tool sections are assumed correct based on previous validation) ---
 
 elif menu == "Primer Design":
     st.header("Basic Primer Design Tool")
@@ -916,7 +936,6 @@ elif menu == "Primer Design":
                 salt_mM = st.number_input("Monovalent Cation Conc. (mM - 'Na'):", min_value=1.0, max_value=200.0, value=50.0, step=1.0, key="p_salt_c", format="%.1f")
                 mg_mM = st.number_input("Mg2+ Concentration (mM - 'Mg'):", min_value=0.0, max_value=50.0, value=0.0, step=0.1, key="p_mg_c", format="%.1f", help="Often 0-5 mM. Check Tm_NN method details.")
                 dNTPs_mM = st.number_input("dNTP Concentration (mM - 'dNTPs'):", min_value=0.0, max_value=10.0, value=0.0, step=0.1, key="p_dntp_c", format="%.1f", help="Often 0-1 mM. Check Tm_NN method details.")
-        # else: # Defaults are kept but not explicitly used for Tm_GC/Tm_Wallace
 
     st.divider()
     if st.button("Design Primers", key="p_design_btn"):
@@ -945,44 +964,24 @@ elif menu == "Primer Design":
                     tm_params_display = f"Method: {tm_method}" # For caption
                     try:
                         # Prepare arguments based on method
-                        # Common arguments for Tm_NN variants
-                        tm_args = {
-                            'strict': False, # Allow approximate calculations if needed
-                            'c_seq': None, # Complementary sequence not needed for self-Tm
-                            'shift': 0,
-                            # Set defaults according to Bio.SeqUtils.MeltingTemp standard usage
-                            'nn_table': MeltingTemp.DNA_NN4, # Example default table
-                            'tmm_table': MeltingTemp.DNA_TMM1,
-                            'imm_table': MeltingTemp.DNA_IMM1,
-                            'de_table': MeltingTemp.DNA_DE1,
-                            'check': True,
-                        }
+                        tm_args = {'strict': False} # Allow approximate calculations
                         if tm_method == "Tm_NN":
                              # Pass concentrations relevant to Tm_NN. Check Biopython docs for exact parameter names expected by Tm_NN.
-                             # Example: Using parameters that are commonly accepted
+                             # These parameters are commonly used in Tm_NN calculations
                              tm_args.update({
                                  'Na': salt_mM,
-                                 'K': 0, # Assume no K+ if only Na+ provided
-                                 'Tris': 0, # Assume no Tris if not specified
                                  'Mg': mg_mM,
                                  'dNTPs': dNTPs_mM,
                                  'dnac1': dna_nM, # Primer concentration
-                                 'dnac2': 0, # Assume no complementary strand concentration given for self-Tm
-                                 'selfcomp': False,
-                                 'saltcorr': 5 # SantaLucia 1998 correction is common
+                                 'nn_table': MeltingTemp.DNA_NN4 # Specify a common NN table
+                                 # Other params like K, Tris, dnac2, saltcorr could be added if needed/known
                              })
                              tm_params_display += f", Primer={dna_nM:.1f}nM, Na={salt_mM:.1f}mM, Mg={mg_mM:.1f}mM, dNTPs={dNTPs_mM:.1f}mM"
-                        # elif tm_method == "Tm_GC" or tm_method == "Tm_Wallace":
-                             # These simpler methods usually don't take extra args or ignore them
-                             # tm_args can remain minimal or empty
 
                         # Get the specific Tm function from MeltingTemp module
                         if hasattr(MeltingTemp, tm_method):
                             tm_func = getattr(MeltingTemp, tm_method)
-                            # Pass only relevant args if function signature is restrictive
-                            # (Need to inspect Biopython source or docs for exact signature of each Tm method)
-                            # For simplicity, pass all possible args; unused ones might be ignored or cause error
-                            # A safer approach might be to tailor args based on tm_method
+                            # Pass the arguments. Simpler methods (Tm_GC, Tm_Wallace) might ignore extra args.
                             fw_tm = tm_func(fw_p, **tm_args)
                             rv_tm = tm_func(rv_p, **tm_args)
                         else:
@@ -996,7 +995,7 @@ elif menu == "Primer Design":
                          st.error(f"An unexpected error occurred during Tm calculation: {tm_e}")
 
                     # Display Results
-                    st.subheader(f"Suggested Primers (from ends of '{seq_id}')")
+                    st.subheader(f"Suggested Primers (from ends of '**{seq_id}**')") # Bold ID
                     p_col1, p_col2 = st.columns(2)
                     with p_col1:
                         st.markdown("#### Forward Primer (5' → 3')")
@@ -1012,7 +1011,7 @@ elif menu == "Primer Design":
                         st.metric(f"Est. Tm", f"{rv_tm:.1f} °C" if isinstance(rv_tm, (float, int)) else "N/A")
 
                     st.divider()
-                    st.metric(f"Resulting Amplicon Size (based on full template '{seq_id}')", f"{len(seq_clean):,} bp")
+                    st.metric(f"Resulting Amplicon Size (based on full template '**{seq_id}**')", f"{len(seq_clean):,} bp") # Bold ID
 
                     # Add caption about Tm parameters if calculated successfully
                     if isinstance(fw_tm, (float, int)):
@@ -1077,7 +1076,13 @@ elif menu == "Restriction Enzyme Analysis":
                     # Validate selected enzymes against Biopython's known enzymes
                     valid_enzymes_obj = []
                     invalid_enzyme_names = []
-                    from Bio.Restriction import AllEnzymes # Load the enzyme list
+                    # Ensure AllEnzymes is available
+                    try:
+                        from Bio.Restriction import AllEnzymes # Load the enzyme list
+                    except ImportError:
+                         st.error("Could not import restriction enzyme data from Biopython. Please ensure Biopython is correctly installed.")
+                         st.stop()
+
                     with st.spinner("Validating selected enzymes..."):
                         for enz_name in final_enzyme_list:
                             try:
@@ -1139,14 +1144,19 @@ elif menu == "Restriction Enzyme Analysis":
                         st.divider()
                         st.write("#### Predicted DNA Fragments:")
                         try:
-                            fragments = analysis.fragments # Get fragment sequences (as strings)
-                            fragment_lengths = sorted([len(f) for f in fragments], reverse=True) # Sort lengths descending
+                            fragments = analysis.fragments() # Call fragments() method to get fragment lengths
+                            # fragments = analysis.fragment_boundaries # Alternative for boundaries? Check docs. Let's assume fragments() gives lengths.
+                            # If fragments() gives sequences, calculate lengths:
+                            # fragment_lengths = sorted([len(f) for f in analysis.fragments()], reverse=True)
+                            # Assuming analysis.fragments returns lengths directly based on common usage:
+                            fragment_lengths = sorted(fragments, reverse=True)
+
 
                             f_col1, f_col2 = st.columns(2)
                             with f_col1:
                                 st.metric("Total Cuts Detected", f"{total_cuts:,}")
                             with f_col2:
-                                st.metric("Number of Fragments", f"{len(fragments):,}")
+                                st.metric("Number of Fragments", f"{len(fragment_lengths):,}") # Use length of the list of lengths
 
                             st.write("**Fragment Lengths (bp, sorted descending):**")
                             if fragment_lengths:
@@ -1154,9 +1164,50 @@ elif menu == "Restriction Enzyme Analysis":
                                     st.text(", ".join(f"{l:,}" for l in fragment_lengths[:15]) + f", ... ({len(fragment_lengths)-15} more fragments)")
                                 else:
                                     st.text(", ".join(f"{l:,}" for l in fragment_lengths))
+                            elif total_cuts == 0 and is_linear:
+                                st.text(f"Single fragment of {len(seq_obj):,} bp (no cuts).")
+                            elif total_cuts == 1 and not is_linear:
+                                st.text(f"Single fragment of {len(seq_obj):,} bp (one cut linearized circular DNA).")
                             else:
-                                # Can happen if 0 cuts on linear, or 1 cut on circular (results in one linear piece)
-                                st.text(f"Single fragment of {len(seq_obj):,} bp (or potentially no fragments if analysis failed).")
+                                # Should not happen if cuts > 0 usually
+                                st.text("Fragment information unavailable or unexpected result.")
+
+
+                        except AttributeError:
+                             st.warning("Could not retrieve fragments directly. The `fragments` method might have changed or is not available in this Biopython version. Trying `fragment_boundaries`.")
+                             try:
+                                 boundaries = analysis.fragment_boundaries
+                                 # Calculate lengths from boundaries
+                                 fragment_lengths_calc = []
+                                 if is_linear:
+                                     last_b = 0
+                                     for b in sorted(boundaries):
+                                         fragment_lengths_calc.append(b - last_b)
+                                         last_b = b
+                                     fragment_lengths_calc.append(len(seq_obj) - last_b)
+                                 else: # Circular
+                                      if not boundaries: # No cuts
+                                           fragment_lengths_calc.append(len(seq_obj))
+                                      else:
+                                           sorted_bounds = sorted(boundaries)
+                                           last_b = sorted_bounds[-1] # Last cut site
+                                           for b in sorted_bounds:
+                                               fragment_lengths_calc.append((b - last_b) % len(seq_obj))
+                                               last_b = b
+                                 fragment_lengths = sorted(fragment_lengths_calc, reverse=True)
+
+                                 f_col1, f_col2 = st.columns(2)
+                                 with f_col1: st.metric("Total Cuts Detected", f"{total_cuts:,}")
+                                 with f_col2: st.metric("Number of Fragments", f"{len(fragment_lengths):,}")
+
+                                 st.write("**Fragment Lengths (bp, sorted descending):**")
+                                 if fragment_lengths:
+                                     if len(fragment_lengths) > 30: st.text(", ".join(f"{l:,}" for l in fragment_lengths[:15]) + f", ... ({len(fragment_lengths)-15} more fragments)")
+                                     else: st.text(", ".join(f"{l:,}" for l in fragment_lengths))
+                                 else: st.text("Fragment information unavailable.")
+
+                             except Exception as frag_e2:
+                                st.warning(f"Could not calculate or display fragment lengths: {frag_e2}")
 
                         except Exception as frag_e:
                             st.warning(f"Could not calculate or display fragment lengths: {frag_e}")
@@ -1169,7 +1220,9 @@ elif menu == "Restriction Enzyme Analysis":
                             try:
                                 # Use print_that to get map string, then display in code block
                                 map_output = io.StringIO()
-                                analysis.print_that(out=map_output, title=f"Map for {seq_id}", top=True) # Render map to string buffer
+                                # Adjust map width based on sequence length (very basic scaling)
+                                map_width = min(100, max(60, len(seq_obj) // 10))
+                                analysis.print_that(out=map_output, title=f"Map for {seq_id}", top=True, rc=True, nc=map_width) # Render map to string buffer
                                 map_string = map_output.getvalue()
                                 map_output.close()
                                 st.code(map_string, language='text')
@@ -1242,6 +1295,9 @@ elif menu == "Pairwise Sequence Alignment":
             try:
                 substitution_matrix = substitution_matrices.load(selected_matrix_name)
                 st.caption(f"Using **{selected_matrix_name}** matrix.")
+            except ValueError: # Handle cases where matrix name might exist but file is missing/corrupt
+                 st.error(f"Could not load substitution matrix file for '{selected_matrix_name}'. It might be missing or corrupted in your Biopython installation.")
+                 substitution_matrix = None
             except Exception as e:
                 st.error(f"Error loading substitution matrix '{selected_matrix_name}': {e}")
                 substitution_matrix = None # Ensure it's None if loading failed
@@ -1271,68 +1327,52 @@ elif menu == "Pairwise Sequence Alignment":
         if not valid_input:
             st.stop() # Halt execution if inputs are invalid
 
-        # --- Sequence Cleaning (Remove whitespace, convert to upper) ---
-        # Keep standard characters plus '-' for potential pre-aligned input? No, pairwise2 handles alignment.
-        # Just remove whitespace and uppercase. pairwise2 handles non-standard chars if matrix/scores allow.
+        # --- Sequence Cleaning ---
         seq1_clean = "".join(seq1.split()).upper()
         seq2_clean = "".join(seq2.split()).upper()
 
-        # Check if sequences became empty after cleaning
-        if not seq1_clean:
-            st.error("Sequence 1 is empty after cleaning.")
-            valid_input = False
-        if not seq2_clean:
-            st.error("Sequence 2 is empty after cleaning.")
-            valid_input = False
-        if not valid_input:
-            st.stop()
+        if not seq1_clean: st.error("Sequence 1 is empty after cleaning."); valid_input = False
+        if not seq2_clean: st.error("Sequence 2 is empty after cleaning."); valid_input = False
+        if not valid_input: st.stop()
 
         # --- Perform Alignment ---
         try:
             st.subheader("Alignment Results")
-            # Determine alignment function and parameters based on mode and type
             mode_prefix = "global" if alignment_mode.startswith("Global") else "local"
-            params = {}
-            align_function_name = ""
-            align_func = None # Initialize
-
-            # Define parameters based on type
+            # Use affine gaps (separate open/extend penalties) -> requires 'x' in function name
             gap_args = {'open': gap_open_penalty, 'extend': gap_extend_penalty}
+            align_func = None
 
-            if substitution_matrix: # Protein alignment
-                # Use matrix (d) and specify gap penalties (s for simple, x for affine/separate open/extend)
-                # We have separate open/extend, so use 'x'
+            if substitution_matrix: # Protein with matrix
                 align_function_name = f"{mode_prefix}dx"
                 params = {'matrix': substitution_matrix, **gap_args}
-            else: # DNA alignment
-                # Use match/mismatch scores (m) and affine gaps (x)
+            else: # DNA with match/mismatch scores
                 align_function_name = f"{mode_prefix}mx"
                 params = {'match': match_score, 'mismatch': mismatch_penalty, **gap_args}
 
-            # Check if the alignment function exists in pairwise2.align
+            # Check if the alignment function exists
             if hasattr(pairwise2.align, align_function_name):
                  align_func = getattr(pairwise2.align, align_function_name)
             else:
-                # Fallback/Alternative Naming? Sometimes 'ms' or 'ds' are used even with affine? Check Biopython docs.
-                # Let's try the simpler names if the affine ones don't exist (might depend on Biopython version)
-                alt_align_name = f"{mode_prefix}ds" if substitution_matrix else f"{mode_prefix}ms"
-                if hasattr(pairwise2.align, alt_align_name):
+                 # Fallback: Try non-affine gap penalty versions ('ds'/'ms') if 'dx'/'mx' aren't found
+                 # This might happen in older Biopython versions?
+                 st.warning(f"Could not find affine gap function '{align_function_name}'. Trying simpler version. Gap extension penalty might be ignored.")
+                 alt_align_name = f"{mode_prefix}ds" if substitution_matrix else f"{mode_prefix}ms"
+                 if hasattr(pairwise2.align, alt_align_name):
                     align_func = getattr(pairwise2.align, alt_align_name)
-                    # If using simpler names, need to adjust params potentially (may not support separate open/extend)
-                    # For simplicity, we'll assume the 'x' functions exist. If errors occur, this is a place to check.
-                    st.warning(f"Could not find affine gap function '{align_function_name}', trying simpler '{alt_align_name}'. Gap penalties might be treated differently.")
-                    # Adjust params if needed for simpler functions (e.g., they might only take one gap penalty)
-                    # This depends heavily on the specific Biopython version and function signature.
-                    # Sticking with the intended affine parameters for now.
-                else:
-                    st.error(f"Internal error: Could not find suitable alignment function like '{align_function_name}' or '{alt_align_name}' in `pairwise2.align`.")
+                    # Adjust params: Use only the open penalty, as extend might not be supported
+                    simpler_gap_args = {'open': gap_open_penalty} # Or potentially just one 'gap' parameter? Check docs.
+                    if substitution_matrix: params = {'matrix': substitution_matrix, **simpler_gap_args}
+                    else: params = {'match': match_score, 'mismatch': mismatch_penalty, **simpler_gap_args}
+                 else:
+                    st.error(f"Internal error: Could not find suitable alignment function ('{align_function_name}' or '{alt_align_name}') in `pairwise2.align`.")
                     st.stop()
 
+
             # Execute alignment
-            st.info(f"Performing {alignment_mode} {sequence_type} alignment for '**{seq_id1}**' vs '**{seq_id2}**'...")
+            st.info(f"Performing {alignment_mode} {sequence_type} alignment for '**{seq_id1}**' vs '**{seq_id2}**'...") # Bold IDs
             with st.spinner("Aligning sequences... This may take time for long sequences."):
-                # Request only the best alignment for simplicity
-                # Pass parameters correctly
+                # Request only the best alignment
                 alignments = align_func(seq1_clean, seq2_clean, **params, one_alignment_only=True)
 
             if not alignments:
@@ -1340,41 +1380,36 @@ elif menu == "Pairwise Sequence Alignment":
             else:
                 # Process the best alignment
                 best_alignment = alignments[0]
-                # Unpack alignment tuple (order depends on pairwise2 version/function, check format_alignment source if needed)
-                # Standard format: seqA, seqB, score, begin, end
-                aligned1, aligned2, score, begin, end = best_alignment
+                aligned1, aligned2, score, begin, end = best_alignment # Standard unpacking
 
                 st.metric("Alignment Score", f"{score:.2f}")
                 if mode_prefix == "local":
-                    # Local alignment: 'begin' and 'end' refer to the indices in the *original* sequences
-                    # where the alignment starts and ends.
-                    st.write(f"**Aligned Region (1-based index):** Seq1: {begin+1}-{end+1}, Seq2: {begin+1}-{end+1} (Note: indices might differ if alignment starts/ends differently in seqs, but `pairwise2` often gives same range for both)")
+                    # The 'begin' and 'end' from pairwise2 refer to the start/end in the aligned segment *within* the original sequences.
+                    # For local, we usually report the span of the alignment.
+                    # Note: format_alignment might not use begin/end correctly for local display, manually show it.
+                    st.write(f"**Aligned Region (0-based index):** Start={begin}, End={end} (indices in original sequences where alignment occurs)")
+
 
                 # Format and display the alignment
                 st.divider()
                 st.write("#### Best Alignment:")
-
                 # Use format_alignment which handles alignment string generation
-                # It does NOT take sequence names as arguments.
                 formatted_alignment_string = pairwise2.format_alignment(
                     aligned1, aligned2, score, begin, end,
-                    full_sequences=(mode_prefix == 'global') # Show full length for global
+                    full_sequences=(mode_prefix == 'global') # Show full length for global only
                 )
 
                 # Manually add the sequence names *before* the formatted alignment block
                 display_text = f"Sequence 1: {seq_id1}\nSequence 2: {seq_id2}\n\n{formatted_alignment_string}"
-
-                # Display the combined text in a code block for monospace font
                 st.code(display_text, language='text')
-
                 st.caption("Alignment key: '|' = Match, '.' = Mismatch (or positive matrix score), ' ' = Mismatch (negative score), '-' = Gap.")
 
                 # Calculate Identity and Gaps based on the *aligned* sequences
                 identity_count = 0
-                gap_count1 = 0
-                gap_count2 = 0
-                alignment_length = len(aligned1) # Length of the aligned sequences (including gaps)
-                aligned_pairs_count = 0 # Number of positions where neither sequence has a gap
+                gap_count1 = 0 # Gaps in seq 1
+                gap_count2 = 0 # Gaps in seq 2
+                alignment_length = len(aligned1)
+                aligned_pairs_count = 0
 
                 for i in range(alignment_length):
                     res1 = aligned1[i]
@@ -1390,31 +1425,24 @@ elif menu == "Pairwise Sequence Alignment":
                         if res1 == res2:
                             identity_count += 1
 
-                total_gaps = gap_count1 + gap_count2 # Total number of gap characters introduced
+                total_gaps = gap_count1 + gap_count2
 
                 # Calculate percentages
-                # Identity over non-gapped aligned columns
                 identity_percent = (identity_count / aligned_pairs_count * 100) if aligned_pairs_count > 0 else 0
-                # Gap percentage over total alignment length
-                gap_percent = (total_gaps / (alignment_length * 2) * 100) if alignment_length > 0 else 0 # Gaps relative to total chars in alignment block
+                gap_percent = (total_gaps / (alignment_length * 2) * 100) if alignment_length > 0 else 0
 
                 # Display Statistics
                 st.divider()
                 st.write("#### Alignment Statistics:")
                 scol1, scol2, scol3 = st.columns(3)
-                with scol1:
-                    st.metric("Alignment Length", f"{alignment_length:,}")
-                with scol2:
-                    # Identity is calculated over non-gapped positions
-                    st.metric("Percent Identity", f"{identity_percent:.1f}%", f"{identity_count:,} / {aligned_pairs_count:,} pairs")
-                with scol3:
-                    # Display total gaps and percentage
-                    st.metric("Gap Percentage", f"{gap_percent:.1f}%", f"{total_gaps:,} gaps / {alignment_length*2:,} chars")
+                with scol1: st.metric("Alignment Length", f"{alignment_length:,}")
+                with scol2: st.metric("Percent Identity", f"{identity_percent:.1f}%", f"{identity_count:,} / {aligned_pairs_count:,} pairs")
+                with scol3: st.metric("Gap Percentage", f"{gap_percent:.1f}%", f"{total_gaps:,} gaps / {alignment_length*2:,} chars")
                 st.caption("Percent Identity = (Identical Matches) / (Aligned Columns without Gaps). Gap Percentage = (Total Gap Characters) / (2 * Alignment Length).")
 
         except Exception as e:
             st.error("An error occurred during sequence alignment:")
-            st.exception(e) # Display the full error traceback for debugging
+            st.exception(e)
 
 
 elif menu == "Motif Finder Tool":
@@ -1524,21 +1552,29 @@ elif menu == "Motif Finder Tool":
                                  start, end = match.start(), min(match.end(), highlight_limit) # Cap end at limit
 
                                  # Handle potential overlaps in display (don't double-highlight)
-                                 # Only add text/highlight if start is after the last highlighted part
                                  if start >= last_end:
-                                     highlighted_html += sequence_to_highlight[last_end:start] # Add text before match
-                                     highlighted_html += mark_open + sequence_to_highlight[start:end] + mark_close # Add highlighted match
+                                     # Escape HTML characters in the sequence segment before adding it
+                                     text_segment = st.markdown(sequence_to_highlight[last_end:start], unsafe_allow_html=False) # Basic text escaping
+                                     highlighted_html += str(text_segment) # Get the escaped string representation if needed? NO - just add directly
+                                     highlighted_html += sequence_to_highlight[last_end:start].replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
+                                     # Add highlighted match (escape content inside mark tag too)
+                                     match_content = sequence_to_highlight[start:end].replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
+                                     highlighted_html += mark_open + match_content + mark_close
                                      last_end = end
                                  elif end > last_end: # Overlap: extend the highlight if current match ends later
-                                     highlighted_html += mark_open + sequence_to_highlight[last_end:end] + mark_close
+                                     # Highlight the new part (escape content)
+                                     overlap_content = sequence_to_highlight[last_end:end].replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
+                                     highlighted_html += mark_open + overlap_content + mark_close
                                      last_end = end
                                  # If match is fully contained within last_end, do nothing
 
-                             highlighted_html += sequence_to_highlight[last_end:] # Add remaining text after last match
+                             # Add remaining text (escape it)
+                             remaining_text = sequence_to_highlight[last_end:].replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
+                             highlighted_html += remaining_text
 
                              st.markdown(f"**Highlighted Sequence (first {highlight_limit:,} characters):**")
-                             # Use a div with monospace font for better alignment and theme background
-                             st.markdown(f"<div style='font-family:monospace; word-wrap:break-word; line-height:1.6; border: 1px solid #4f5b66; padding: 10px; border-radius: 5px; background-color: #2c3e50;'>{highlighted_html}{'...' if len(seq_cleaned) > highlight_limit else ''}</div>", unsafe_allow_html=True)
+                             # Use a div with monospace font and appropriate background/border
+                             st.markdown(f"<div style='font-family: monospace, Courier, mono; word-wrap:break-word; line-height:1.6; border: 1px solid #4f5b66; padding: 10px; border-radius: 5px; background-color: #393e46; color: #e0e0e0;'>{highlighted_html}{'...' if len(seq_cleaned) > highlight_limit else ''}</div>", unsafe_allow_html=True)
 
                     else:
                         st.info("The specified motif/pattern was not found in the sequence.")
@@ -1588,7 +1624,12 @@ elif menu == "Bioinformatics Tool (Transcription/Translation)":
                         st.write("**Input DNA (Coding Strand, 5'→3'):**")
                         st.code(str(dna_seq_obj), language='text')
                     with col2:
-                        st.metric("GC Content", f"{gc_fraction(dna_seq_obj)*100:.1f}%")
+                        try: # Calculate GC fraction only if sequence is not empty
+                            gc_cont = gc_fraction(dna_seq_obj)*100 if dna_length > 0 else 0
+                            st.metric("GC Content", f"{gc_cont:.1f}%")
+                        except Exception as gc_err:
+                            st.metric("GC Content", "N/A")
+                            st.warning(f"Could not calculate GC content: {gc_err}")
                         st.write("**Reverse Complement DNA (5'→3'):**")
                         st.code(str(dna_seq_obj.reverse_complement()), language='text')
 
@@ -1605,20 +1646,25 @@ elif menu == "Bioinformatics Tool (Transcription/Translation)":
                     st.write("#### Translation (RNA → Protein)")
                     st.caption("Translation uses the standard genetic code (Table 1) and starts from the beginning of the RNA sequence. '*' indicates a STOP codon.")
 
-                    # Check if RNA length is a multiple of 3
+                    # Check if RNA length is suitable for translation
                     remainder = len(rna_seq_obj) % 3
                     rna_for_translation = rna_seq_obj
                     warn_incomplete_codon = False
-                    if remainder != 0:
+                    if len(rna_seq_obj) < 3:
+                        st.error("Cannot translate: The RNA sequence is shorter than 3 bases (one codon).")
+                        rna_for_translation = None # Flag to skip translation attempts
+                    elif remainder != 0:
                         warn_incomplete_codon = True
-                        # Translate using cds=False to handle incomplete codons without error, but warn user
-                        # We will show the translation of the complete codons only
+                        # Trim incomplete codon for standard translation behavior
                         rna_for_translation = rna_seq_obj[:-remainder]
+                        if not rna_for_translation: # If trimming resulted in empty seq
+                             st.error("Cannot translate: Effective RNA length is zero after removing incomplete codon.")
+                             rna_for_translation = None
 
 
-                    if len(rna_for_translation) >= 3:
+                    if rna_for_translation: # Proceed only if we have a valid sequence for translation
                         # Translate, stopping at the first stop codon
-                        protein_seq_to_stop = rna_for_translation.translate(table=1, to_stop=True, cds=False) # cds=False allows translation even if length not mult of 3
+                        protein_seq_to_stop = rna_for_translation.translate(table=1, to_stop=True, cds=False) # cds=False avoids error if stop is internal
                         st.write("**Protein Sequence (Translated until first STOP codon):**")
                         st.code(str(protein_seq_to_stop), language='text')
                         st.metric("Protein Length (until STOP)", f"{len(protein_seq_to_stop):,} aa")
@@ -1630,18 +1676,14 @@ elif menu == "Bioinformatics Tool (Transcription/Translation)":
                         st.divider()
                         show_full_translation = st.checkbox("Show Full Translation (including internal STOP codons)", value=False, key="tr_full")
                         if show_full_translation:
-                            protein_seq_full = rna_for_translation.translate(table=1, to_stop=False, cds=False) # Use default table=1 (standard code)
+                            protein_seq_full = rna_for_translation.translate(table=1, to_stop=False, cds=False)
                             st.write("**Full Protein Sequence (includes internal '*' = STOP):**")
                             st.code(str(protein_seq_full), language='text')
                             st.metric("Full Translation Length", f"{len(protein_seq_full):,} aa")
 
-                    elif len(rna_seq_obj) < 3:
-                        st.error("Cannot translate: The RNA sequence is shorter than 3 bases (one codon).")
-                    else: # Length was multiple of 3, but 0 after trimming (shouldn't happen if initial length >= 3)
-                         st.error("Cannot translate: Effective RNA length for translation is zero.")
 
                 except CodonTable.TranslationError as trans_error:
-                     st.error(f"Translation Error: {trans_error}. This might happen with non-standard characters or invalid codons.")
+                     st.error(f"Translation Error: {trans_error}. This might happen with non-standard characters or invalid codons within the sequence.")
                 except Exception as e:
                     st.error("An error occurred during processing:")
                     st.exception(e)
@@ -1681,14 +1723,13 @@ elif menu == "Genome Coverage Plotter":
             # Assume no header for typical genomics formats, allow user override
             default_has_header = file_extension in ['.csv', '.tsv', '.txt'] # Only guess header for generic types
             has_header = st.checkbox("File has header row", value=default_has_header, key="cov_head")
-            header_arg = 'infer' if has_header else None
+            header_arg = 0 if has_header else None # Use row 0 as header if checked, else None
             comment_char = st.text_input("Comment Character (lines starting with this ignored):", '#', max_chars=1, key="cov_comm", help="Leave blank if no comment lines.")
 
         st.divider()
         st.subheader("Data Loading and Column Selection")
         try:
             # Read the file content
-            # Use BytesIO for pandas to handle potential encoding issues better
             bytes_data = uploaded_file.getvalue()
             s_buf = io.BytesIO(bytes_data)
 
@@ -1705,8 +1746,8 @@ elif menu == "Genome Coverage Plotter":
                 st.error("The uploaded file appears to be empty or contains only comments/header.")
                 st.stop()
 
-            # Assign generic column names if no header AND columns are unnamed
-            if not has_header and all(isinstance(c, int) for c in df_coverage.columns):
+            # Assign generic column names if no header AND columns are unnamed (integers)
+            if header_arg is None and all(isinstance(c, int) for c in df_coverage.columns):
                 num_cols = df_coverage.shape[1]
                 if num_cols >= 2:
                     df_coverage.columns = [f'Column_{i+1}' for i in range(num_cols)]
@@ -1728,7 +1769,7 @@ elif menu == "Genome Coverage Plotter":
             normalized_columns = {str(c).strip().lower(): c for c in available_columns}
             pos_guess, cov_guess, chr_guess = None, None, None
             # Common column names to check
-            chr_keywords = ['chr', 'chrom', 'chromosome', 'seq', 'contig', 'scaffold']
+            chr_keywords = ['chr', 'chrom', 'chromosome', 'seq', 'contig', 'scaffold', '#chr', '#chrom']
             pos_keywords = ['pos', 'position', 'start', 'coordinate', 'loc', 'location', 'base']
             cov_keywords = ['depth', 'cov', 'coverage', 'score', 'value', 'count', 'reads']
 
@@ -1741,11 +1782,8 @@ elif menu == "Genome Coverage Plotter":
                  if key in normalized_columns: cov_guess = normalized_columns[key]; break
 
             # Set default indices based on guesses or simple column order
-            # Common formats: samtools depth (chr, pos, depth), bedgraph (chr, start, end, score)
             chr_default_index = available_columns.index(chr_guess) if chr_guess in available_columns else 0
-            # samtools depth: pos is col 2 (idx 1). bedgraph: start is col 2 (idx 1).
             pos_default_index = available_columns.index(pos_guess) if pos_guess in available_columns else 1
-             # samtools depth: depth is col 3 (idx 2). bedgraph: score is col 4 (idx 3).
             cov_default_index = available_columns.index(cov_guess) if cov_guess in available_columns else (3 if len(available_columns) > 3 and file_extension in ['.bedgraph', '.bed'] else 2)
             # Ensure indices are within bounds
             chr_default_index = min(chr_default_index, len(available_columns)-1)
@@ -1790,11 +1828,11 @@ elif menu == "Genome Coverage Plotter":
                     selected_chr = None
                     if chromosome_column:
                         unique_chrs = sorted(plot_data_full['Chromosome'].astype(str).unique())
-                        # Add 'All' option
                         filter_options = ['All'] + unique_chrs
                         selected_chr = st.selectbox("Filter by Chromosome/Contig:", filter_options, index=0, key="cov_filter_chr")
                         if selected_chr != 'All':
-                            plot_data = plot_data_full[plot_data_full['Chromosome'].astype(str) == selected_chr].copy()
+                            # Ensure comparison handles potential type differences (e.g., '1' vs 1)
+                            plot_data = plot_data_full[plot_data_full['Chromosome'].astype(str) == str(selected_chr)].copy()
                             st.info(f"Filtered data to show only **{selected_chr}**.")
                         else:
                             plot_data = plot_data_full.copy() # Use all data
@@ -1820,7 +1858,7 @@ elif menu == "Genome Coverage Plotter":
                         # Sort data by position for correct plotting
                         plot_data = plot_data.sort_values(by='Position').reset_index(drop=True)
                         min_pos, max_pos = plot_data['Position'].min(), plot_data['Position'].max()
-                        plot_title_suffix = f" ({selected_chr})" if selected_chr and selected_chr != 'All' else f" ({chromosome_column})" if chromosome_column else ""
+                        plot_title_suffix = f" ({selected_chr})" if selected_chr and selected_chr != 'All' else f" (All Chromosomes)" if chromosome_column else ""
                         st.write(f"Plotting coverage data from position **{min_pos:,.0f}** to **{max_pos:,.0f}**{plot_title_suffix}.")
 
 
@@ -1831,8 +1869,8 @@ elif menu == "Genome Coverage Plotter":
                             log_scale_y = st.checkbox("Use Logarithmic Y-axis", value=False, key="cov_log", help="Useful if coverage varies greatly.")
                         with col_p2:
                             # Smoothing (Rolling Mean)
-                            max_smooth = min(201, len(plot_data)//2) # Limit smoothing window
-                            smoothing_window = st.slider("Smoothing Window Size (0 = None):", min_value=0, max_value=max(1, max_smooth), value=0, step=2, key="cov_smooth", help="Applies a rolling mean. Use odd numbers (e.g., 5, 11, 51). 0 disables smoothing.")
+                            max_smooth = min(201, max(1, len(plot_data)//2)) # Limit smoothing window, ensure max is at least 1
+                            smoothing_window = st.slider("Smoothing Window Size (0 = None):", min_value=0, max_value=max_smooth, value=0, step=2, key="cov_smooth", help="Applies a rolling mean. Use odd numbers (e.g., 5, 11, 51). 0 disables smoothing.")
                             # Ensure window size is odd if > 0
                             if smoothing_window > 0 and smoothing_window % 2 == 0:
                                 smoothing_window += 1
@@ -1873,7 +1911,7 @@ elif menu == "Genome Coverage Plotter":
                         ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: format(int(x), ','))) # Comma separators for y-axis
 
                         # Add Legend with themed style
-                        legend = ax.legend(facecolor='#2c3e50', labelcolor='#e0e0e0', framealpha=0.8, fontsize=10)
+                        legend = ax.legend(facecolor='#393e46', labelcolor='#e0e0e0', framealpha=0.8, fontsize=10)
                         for text in legend.get_texts():
                             text.set_fontfamily('Times New Roman')
                             text.set_fontweight('bold')
